@@ -31,12 +31,26 @@ import static com.google.common.base.Strings.nullToEmpty;
  */
 @AutoValue
 public abstract class SecretContent {
-    public static SecretContent of(long id, long secretSeriesId, String encryptedContent, String hmac, ApiDate createdAt,
-                                   @Nullable String createdBy, ApiDate updatedAt, @Nullable String updatedBy,
+
+    public static SecretContent of(long id,
+                                   long secretSeriesId,
+                                   String encryptedContent,
+                                   String hmac,
+                                   ApiDate createdAt,
+                                   @Nullable String createdBy,
+                                   ApiDate updatedAt,
+                                   @Nullable String updatedBy,
                                    ImmutableMap<String, String> metadata, long expiry) {
-        return new AutoValue_SecretContent(id, secretSeriesId, encryptedContent, hmac,
-                createdAt, nullToEmpty(createdBy), updatedAt,
-                nullToEmpty(updatedBy), metadata, expiry);
+
+        return new AutoValue_SecretContent(id,
+                secretSeriesId,
+                encryptedContent,
+                hmac,
+                createdAt,
+                nullToEmpty(createdBy),
+                updatedAt,
+                nullToEmpty(updatedBy),
+                metadata, expiry);
     }
 
     public abstract long id();

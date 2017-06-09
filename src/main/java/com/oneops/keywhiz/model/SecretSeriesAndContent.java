@@ -23,6 +23,7 @@ import com.google.auto.value.AutoValue;
  */
 @AutoValue
 public abstract class SecretSeriesAndContent {
+
     public static SecretSeriesAndContent of(SecretSeries series, SecretContent content) {
         return new AutoValue_SecretSeriesAndContent(series, content);
     }

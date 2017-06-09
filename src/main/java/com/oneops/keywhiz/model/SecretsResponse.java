@@ -13,33 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.oneops.keywhiz.model;
 
 import com.google.common.base.MoreObjects;
-
-import javax.annotation.Nullable;
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
 
 /**
- * Special type of {@link Client} with elevated, automation privileges.
+ * Response to a listing of existing secrets
  */
-public class AutomationClient extends Client {
-    private AutomationClient(Client client) {
-        super(client.getId(), client.getName(), client.getDescription(), client.getCreatedAt(),
-                client.getCreatedBy(), client.getUpdatedAt(), client.getUpdatedBy(), client.getLastSeen(), client.isEnabled(), true);
+public class SecretsResponse {
+    /**
+     * Listing of secrets with related information but without secret content.
+     */
+    public final ImmutableList<SanitizedSecret> secrets;
+
+    public SecretsResponse(ImmutableList<SanitizedSecret> secrets) {
+        this.secrets = secrets;
     }
 
-    @Nullable
-    public static AutomationClient of(Client client) {
-        if (client.isAutomationAllowed()) {
-            return new AutomationClient(client);
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(secrets);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof SecretsResponse) {
+            SecretsResponse that = (SecretsResponse) o;
+            if (Objects.equal(this.secrets, that.secrets)) {
+                return true;
+            }
         }
-        return null;
+        return false;
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("name", getName())
+                .add("secrets", secrets)
                 .toString();
     }
 }

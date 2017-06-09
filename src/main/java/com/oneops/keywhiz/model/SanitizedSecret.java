@@ -33,6 +33,7 @@ import static com.google.common.base.Strings.nullToEmpty;
  */
 @AutoValue
 public abstract class SanitizedSecret {
+
     @JsonCreator
     public static SanitizedSecret of(
             @JsonProperty("id") long id,
@@ -48,13 +49,21 @@ public abstract class SanitizedSecret {
             @JsonProperty("generationOptions") @Nullable Map<String, String> generationOptions,
             @JsonProperty("expiry") long expiry,
             @JsonProperty("version") @Nullable Long version) {
-        ImmutableMap<String, String> meta =
-                (metadata == null) ? ImmutableMap.of() : ImmutableMap.copyOf(metadata);
-        ImmutableMap<String, String> genOptions =
-                (generationOptions == null) ? ImmutableMap.of() : ImmutableMap.copyOf(generationOptions);
-        return new AutoValue_SanitizedSecret(id, name, nullToEmpty(description), checksum, createdAt,
-                nullToEmpty(createdBy), updatedAt, nullToEmpty(updatedBy), meta, Optional.ofNullable(type),
-                genOptions, expiry, Optional.ofNullable(version));
+
+        ImmutableMap<String, String> meta = (metadata == null) ? ImmutableMap.of() : ImmutableMap.copyOf(metadata);
+        ImmutableMap<String, String> genOptions = (generationOptions == null) ? ImmutableMap.of() : ImmutableMap.copyOf(generationOptions);
+
+        return new AutoValue_SanitizedSecret(id, name,
+                nullToEmpty(description),
+                checksum,
+                createdAt,
+                nullToEmpty(createdBy),
+                updatedAt,
+                nullToEmpty(updatedBy),
+                meta,
+                Optional.ofNullable(type),
+                genOptions,
+                expiry, Optional.ofNullable(version));
     }
 
     public static SanitizedSecret of(long id, String name) {

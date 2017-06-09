@@ -29,6 +29,7 @@ import static com.google.common.base.Strings.nullToEmpty;
  * Clients table entry for a client-cert authenticated client.
  */
 public class Client {
+
     @JsonProperty
     private final long id;
 
@@ -154,7 +155,16 @@ public class Client {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name, description, createdAt, createdBy, updatedAt, updatedBy, lastSeen, enabled, automationAllowed);
+        return Objects.hashCode(id,
+                name,
+                description,
+                createdAt,
+                createdBy,
+                updatedAt,
+                updatedBy,
+                lastSeen,
+                enabled,
+                automationAllowed);
     }
 
     @Override

@@ -211,8 +211,19 @@ public class Secret {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name, description, getSecret(), checksum, createdAt, createdBy, updatedAt,
-                updatedBy, metadata, type, generationOptions, expiry);
+        return Objects.hashCode(id,
+                name,
+                description,
+                getSecret(),
+                checksum,
+                createdAt,
+                createdBy,
+                updatedAt,
+                updatedBy,
+                metadata,
+                type,
+                generationOptions,
+                expiry);
     }
 
 

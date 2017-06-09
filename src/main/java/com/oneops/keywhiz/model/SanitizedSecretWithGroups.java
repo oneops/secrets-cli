@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @AutoValue
 public abstract class SanitizedSecretWithGroups {
+
     @JsonCreator
     public static SanitizedSecretWithGroups of(
             @JsonProperty("secret") SanitizedSecret secret,
@@ -37,8 +38,19 @@ public abstract class SanitizedSecretWithGroups {
     }
 
     public static SanitizedSecretWithGroups of(long id, String name, List<Group> groups) {
-        SanitizedSecret sanitizedSecret = SanitizedSecret.of(id, name, null, "",
-                new ApiDate(0), null, new ApiDate(0), null, null, null, null, 0, null);
+        SanitizedSecret sanitizedSecret = SanitizedSecret.of(id,
+                name,
+                null,
+                "",
+                new ApiDate(0),
+                null,
+                new ApiDate(0),
+                null,
+                null,
+                null,
+                null,
+                0,
+                null);
         return SanitizedSecretWithGroups.of(sanitizedSecret, groups);
     }
 

@@ -26,10 +26,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.nullToEmpty;
 
 /**
- * Groups entry for collecting a set of {@link Client}s, via membership, and/or {@link Secret}s, via
- * access grants.
+ * Groups entry for collecting a set of {@link Client}s, via membership,
+ * and/or {@link Secret}s, via access grants.
  */
 public class Group {
+
     @JsonProperty
     private final long id;
 
