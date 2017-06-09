@@ -64,7 +64,7 @@
 [oneops]: http://oneops.com/
 [keywhiz]: https://github.com/square/keywhiz
 
-[apidoc-url]: https://oneops.github.io/keywhiz-cli/
+[apidoc-url]: https://oneops.github.io/keywhiz-cli/api
 [apidoc-svg]: https://img.shields.io/badge/api--doc-latest-ff69b4.svg?style=flat-square
 
 [cl-url]: https://github.com/oneops/keywhiz-cli/blob/master/CHANGELOG.md#011---2017-05-31
