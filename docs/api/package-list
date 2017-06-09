@@ -1,4 +1,7 @@
 com.oneops
 com.oneops.cli
+com.oneops.keywhiz
+com.oneops.keywhiz.model
 com.oneops.log
+com.oneops.security
 com.oneops.utils
