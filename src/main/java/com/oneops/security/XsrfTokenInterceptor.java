@@ -17,16 +17,18 @@
  *******************************************************************************/
 package com.oneops.security;
 
-import okhttp3.*;
+import com.google.common.net.HttpHeaders;
+import okhttp3.Cookie;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.net.HttpCookie;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.google.common.net.HttpHeaders.COOKIE;
+import static com.oneops.utils.CookieCutter.decodeCookies;
 
 /**
  * Http request interceptor to handle server-side XSRF protection.
@@ -47,7 +49,7 @@ public class XsrfTokenInterceptor implements Interceptor {
     public XsrfTokenInterceptor() {
     }
 
-    public XsrfTokenInterceptor(@Nonnull  String xsrfCookieName,
+    public XsrfTokenInterceptor(@Nonnull String xsrfCookieName,
                                 @Nonnull String xsrfHeaderName) {
         this.xsrfCookieName = xsrfCookieName;
         this.xsrfHeaderName = xsrfHeaderName;
@@ -56,8 +58,17 @@ public class XsrfTokenInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request req = chain.request();
-
-        //req.headers(COOKIE)
+        try {
+            for (String header : req.headers(HttpHeaders.COOKIE)) {
+                for (Cookie cookie : decodeCookies(header, req.url().host())) {
+                    if (cookie.name().equalsIgnoreCase(xsrfCookieName)) {
+                        req = req.newBuilder().addHeader(xsrfHeaderName, cookie.value()).build();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            log.log(Level.WARNING, "Error setting " + xsrfHeaderName + " header in request", ex);
+        }
         return chain.proceed(req);
 
     }
@@ -69,8 +80,5 @@ public class XsrfTokenInterceptor implements Interceptor {
     public String getXsrfHeaderName() {
         return xsrfHeaderName;
     }
-
-
-
 }
 
