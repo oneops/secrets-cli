@@ -12,3 +12,6 @@ target/
 *.DS_Store
 .AppleDouble
 .LSOverride
+
+### Keywhiz-CLI Test fixtures ###
+src/main/resource/keywhiz_truststore.p12
