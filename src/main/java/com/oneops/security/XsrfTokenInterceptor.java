@@ -49,8 +49,7 @@ public class XsrfTokenInterceptor implements Interceptor {
     public XsrfTokenInterceptor() {
     }
 
-    public XsrfTokenInterceptor(@Nonnull String xsrfCookieName,
-                                @Nonnull String xsrfHeaderName) {
+    public XsrfTokenInterceptor(String xsrfCookieName, String xsrfHeaderName) {
         this.xsrfCookieName = xsrfCookieName;
         this.xsrfHeaderName = xsrfHeaderName;
     }

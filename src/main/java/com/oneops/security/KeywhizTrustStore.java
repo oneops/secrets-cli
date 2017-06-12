@@ -58,8 +58,8 @@ public class KeywhizTrustStore {
             }
             trustStore = KeyStore.getInstance("PKCS12");
             trustStore.load(ins, trustStorePass);
-        } catch (Exception e) {
-            throw new IllegalStateException("Keywhiz trust-store (" + trustStoreName + ") is not available.");
+        } catch (Exception ex) {
+            throw new IllegalStateException("Keywhiz trust-store (" + trustStoreName + ") is not available.", ex);
         }
     }
 
