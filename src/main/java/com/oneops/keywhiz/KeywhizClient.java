@@ -19,17 +19,29 @@ package com.oneops.keywhiz;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.net.HttpHeaders;
 import com.oneops.keywhiz.model.*;
+import com.oneops.security.KeywhizTrustStore;
+import com.oneops.security.XsrfTokenInterceptor;
 import okhttp3.*;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 
+import javax.net.ssl.*;
 import java.io.IOException;
+import java.net.CookieManager;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import static com.google.common.net.HttpHeaders.USER_AGENT;
 import static java.lang.String.format;
+import static java.net.CookiePolicy.ACCEPT_ALL;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Client for interacting with the Keywhiz Server.
@@ -38,16 +50,78 @@ import static java.lang.String.format;
  */
 public class KeywhizClient {
 
+    public static Logger log = Logger.getLogger(KeywhizClient.class.getSimpleName());
+
     public static final MediaType JSON = MediaType.parse("application/json");
 
-    private final ObjectMapper mapper;
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+    public static final CookieManager cookieMgr;
+
     private final OkHttpClient client;
+
     private final HttpUrl baseUrl;
 
-    public KeywhizClient(ObjectMapper mapper, OkHttpClient client, HttpUrl baseUrl) {
-        this.mapper = checkNotNull(mapper);
-        this.client = checkNotNull(client);
-        this.baseUrl = checkNotNull(baseUrl);
+    static {
+        log.info("Initializing the cookie manager!");
+        cookieMgr = new CookieManager();
+        cookieMgr.setCookiePolicy(ACCEPT_ALL);
+    }
+
+    /**
+     * Create a keywhiz client for the given baseurl.
+     *
+     * @param baseUrl keywhiz server base url
+     * @throws GeneralSecurityException throws if any error creating the https client.
+     */
+    public KeywhizClient(String baseUrl) throws GeneralSecurityException {
+        log.info("Creating Keywhiz client for " + baseUrl);
+        this.client = createHttpsClient();
+        this.baseUrl = HttpUrl.parse(baseUrl);
+    }
+
+    /**
+     * Clear all cookies from cookie manager.
+     */
+    public static void clearCookies() {
+        log.warning("Clearing all cookies!");
+        cookieMgr.getCookieStore().removeAll();
+    }
+
+    /**
+     * Creates a {@link OkHttpClient} to start a TLS connection.
+     */
+    private OkHttpClient createHttpsClient() throws GeneralSecurityException {
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        trustManagerFactory.init(KeywhizTrustStore.getTrustStore());
+        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+
+        SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+        sslContext.init(new KeyManager[0], trustManagers, new SecureRandom());
+        SSLSocketFactory socketFactory = sslContext.getSocketFactory();
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(log::info);
+        loggingInterceptor.setLevel(Level.BASIC);
+
+        OkHttpClient.Builder client = new OkHttpClient().newBuilder()
+                .sslSocketFactory(socketFactory, (X509TrustManager) trustManagers[0])
+                .connectionSpecs(Collections.singletonList(ConnectionSpec.MODERN_TLS))
+                .followSslRedirects(false)
+                .retryOnConnectionFailure(false)
+                .connectTimeout(5, SECONDS)
+                .readTimeout(10, SECONDS)
+                .writeTimeout(10, SECONDS)
+                .addInterceptor(chain -> {
+                    Request req = chain.request().newBuilder()
+                            .addHeader(CONTENT_TYPE, "application/json")
+                            .addHeader(USER_AGENT, "OneOps-Keywhiz-Cli")
+                            .build();
+                    return chain.proceed(req);
+                })
+                .addInterceptor(loggingInterceptor)
+                .addNetworkInterceptor(new XsrfTokenInterceptor())
+                .cookieJar(new JavaNetCookieJar(cookieMgr));
+        return client.build();
     }
 
     /**
@@ -265,7 +339,7 @@ public class KeywhizClient {
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
-                .addHeader(HttpHeaders.CONTENT_TYPE, JSON.toString())
+                .addHeader(CONTENT_TYPE, JSON.toString())
                 .build();
 
         return makeCall(request);
@@ -345,5 +419,4 @@ public class KeywhizClient {
             return "Malformed request semantics from client (422)";
         }
     }
-
 }
