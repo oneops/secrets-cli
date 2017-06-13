@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.oneops.keywhiz.model.*;
-import com.oneops.security.KeywhizTrustStore;
 import com.oneops.security.XsrfTokenInterceptor;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;

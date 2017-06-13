@@ -15,11 +15,13 @@
  *   limitations under the License.
  *
  *******************************************************************************/
-package com.oneops.security;
+package com.oneops.keywhiz;
 
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.util.logging.Logger;
+
+import static com.oneops.cli.Config.keywhiz;
 
 /**
  * Handles PKCS12 trust-store to communicate with Keywhiz server.
@@ -36,21 +38,13 @@ public class KeywhizTrustStore {
     private static Logger log = Logger.getLogger(KeywhizTrustStore.class.getSimpleName());
 
     /**
-     * PKCS12 Trust-store name, which is embedded in the resources
-     */
-    private static String trustStoreName = "/keywhiz_truststore.p12";
-
-    /**
-     * Trust store password.
-     */
-    private static char[] trustStorePass = new char[]{'c', 'h', 'a', 'n', 'g', 'e', 'i', 't'};
-
-    /**
      * Default trust store.
      */
     private static KeyStore trustStore;
 
     static {
+        String trustStoreName = keywhiz.getTrustStore().getName();
+        char[] trustStorePass = keywhiz.getTrustStore().getPassword();
         try (InputStream ins = KeywhizTrustStore.class.getResourceAsStream(trustStoreName)) {
             log.info("Loading the Keywhiz trust-store " + trustStoreName);
             if (ins == null) {
