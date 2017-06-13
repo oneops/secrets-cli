@@ -1,7 +1,9 @@
 com.oneops
 com.oneops.cli
+com.oneops.config
 com.oneops.keywhiz
 com.oneops.keywhiz.model
+com.oneops.ldap
 com.oneops.log
 com.oneops.security
 com.oneops.utils
