@@ -15,11 +15,9 @@
  *   limitations under the License.
  *
  *******************************************************************************/
-package com.oneops.cli;
+package com.oneops.config;
 
 import com.google.common.base.Strings;
-import com.oneops.config.Keywhiz;
-import com.oneops.config.LDAP;
 import com.typesafe.config.ConfigFactory;
 
 import java.io.IOException;
@@ -37,7 +35,7 @@ import static java.util.jar.Attributes.Name.IMPLEMENTATION_VERSION;
  *
  * @author Suresh
  */
-public class Config {
+public class CliConfig {
 
     /**
      * Holds all manifest attributes in the jar file.
@@ -55,7 +53,7 @@ public class Config {
         ldap = new LDAP(appConfig);
     }
 
-    private Config() {
+    private CliConfig() {
     }
 
     /**
@@ -64,7 +62,7 @@ public class Config {
      */
     private static Attributes readJarManifest() {
         try {
-            URL res = Config.class.getResource(Config.class.getSimpleName() + ".class");
+            URL res = CliConfig.class.getResource(CliConfig.class.getSimpleName() + ".class");
             URLConnection conn = res.openConnection();
             if (conn instanceof JarURLConnection) {
                 return ((JarURLConnection) conn).getManifest().getMainAttributes();

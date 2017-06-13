@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.util.logging.Logger;
 
-import static com.oneops.cli.Config.keywhiz;
+import static com.oneops.config.CliConfig.keywhiz;
 
 /**
  * Handles PKCS12 trust-store to communicate with Keywhiz server.

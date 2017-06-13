@@ -29,10 +29,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.oneops.cli.Config.banner;
 import static com.oneops.cli.Context.cliCtx;
-import static com.oneops.cli.Term.clearScreen;
 import static com.oneops.cli.Term.*;
+import static com.oneops.config.CliConfig.banner;
 import static com.oneops.utils.Color.bold;
 import static com.oneops.utils.Color.err;
 import static com.oneops.utils.Common.*;
