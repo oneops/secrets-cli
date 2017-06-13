@@ -50,7 +50,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public class KeywhizClient {
 
-    public static Logger log = Logger.getLogger(KeywhizClient.class.getSimpleName());
+    public static final Logger log = Logger.getLogger(KeywhizClient.class.getSimpleName());
 
     public static final MediaType JSON = MediaType.parse("application/json");
 
@@ -113,7 +113,7 @@ public class KeywhizClient {
                 .writeTimeout(10, SECONDS)
                 .addInterceptor(chain -> {
                     Request req = chain.request().newBuilder()
-                            .addHeader(CONTENT_TYPE, "application/json")
+                            .addHeader(CONTENT_TYPE, JSON.toString())
                             .addHeader(USER_AGENT, "OneOps-Keywhiz-Cli")
                             .build();
                     return chain.proceed(req);
@@ -419,4 +419,5 @@ public class KeywhizClient {
             return "Malformed request semantics from client (422)";
         }
     }
+
 }

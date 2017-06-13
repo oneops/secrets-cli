@@ -63,7 +63,9 @@
         <mockito.version>2.8.9</mockito.version>
         <commonlang.version>3.5</commonlang.version>
         <failsafe.version>1.0.4</failsafe.version>
+        <ldaptive.version>1.2.1</ldaptive.version>
         <jline.version>3.3.0</jline.version>
+        <typesafeconfig.version>1.3.1</typesafeconfig.version>
         <junit.platform.version>1.0.0-M4</junit.platform.version>
         <junit.version>5.0.0-M4</junit.version>
         <jsr305.version>3.0.2</jsr305.version>
@@ -123,6 +125,16 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commonlang.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafeconfig.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ldaptive</groupId>
+            <artifactId>ldaptive</artifactId>
+            <version>${ldaptive.version}</version>
         </dependency>
         <dependency>
             <groupId>net.jodah</groupId>

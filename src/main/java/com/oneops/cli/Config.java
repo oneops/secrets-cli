@@ -18,6 +18,9 @@
 package com.oneops.cli;
 
 import com.google.common.base.Strings;
+import com.oneops.config.Keywhiz;
+import com.oneops.config.LDAP;
+import com.typesafe.config.ConfigFactory;
 
 import java.io.IOException;
 import java.net.JarURLConnection;
@@ -41,8 +44,15 @@ public class Config {
      */
     public static final Attributes jarManifest;
 
+    public static final Keywhiz keywhiz;
+
+    public static final LDAP ldap;
+
     static {
         jarManifest = readJarManifest();
+        com.typesafe.config.Config appConfig = ConfigFactory.load("application");
+        keywhiz = new Keywhiz(appConfig);
+        ldap = new LDAP(appConfig);
     }
 
     private Config() {
@@ -79,4 +89,6 @@ public class Config {
                 "Type " + green("help") + " or " + green("?") +
                 " for help, " + green("exit") + " to exit.";
     }
+
 }
+
