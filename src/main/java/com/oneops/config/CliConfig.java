@@ -18,12 +18,15 @@
 package com.oneops.config;
 
 import com.google.common.base.Strings;
+import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.jar.Attributes;
 
 import static com.oneops.utils.Color.*;
@@ -42,15 +45,30 @@ public class CliConfig {
      */
     public static final Attributes jarManifest;
 
+    /**
+     * Keywhiz server config
+     */
     public static final Keywhiz keywhiz;
 
+    /**
+     * LDAP server config
+     */
     public static final LDAP ldap;
 
+    /**
+     * Log config.
+     */
+    public static final Path logPath;
+
+    /**
+     * Config initialization.
+     */
     static {
         jarManifest = readJarManifest();
-        com.typesafe.config.Config appConfig = ConfigFactory.load("application");
+        Config appConfig = ConfigFactory.load("application");
         keywhiz = new Keywhiz(appConfig);
         ldap = new LDAP(appConfig);
+        logPath = Paths.get(appConfig.getString("log.dir"), appConfig.getString("log.filePattern"));
     }
 
     private CliConfig() {
@@ -87,6 +105,5 @@ public class CliConfig {
                 "Type " + green("help") + " or " + green("?") +
                 " for help, " + green("exit") + " to exit.";
     }
-
 }
 

@@ -20,11 +20,10 @@ package com.oneops.log;
 import com.oneops.utils.Platform;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.*;
+
+import static com.oneops.config.CliConfig.logPath;
 
 /**
  * A Java logging formatter that writes more compact output than the default.
@@ -51,11 +52,6 @@ public class BriefLogFormatter extends Formatter {
      * its configuration won't work. We must keep a reference to our custom logger around.
      */
     private static List<Logger> loggerRefs = new ArrayList<>();
-
-    /**
-     * Log directory.
-     */
-    public static final Path logDir = Paths.get(Platform.getUserHome() + "/keywhiz-cli/log");
 
     /**
      * Used to check whether the logger is already initialized.
@@ -108,9 +104,10 @@ public class BriefLogFormatter extends Formatter {
     public static void init() throws IOException {
         Logger logger = Logger.getLogger("");
         if (!initialized) {
-            if (!logDir.toFile().exists()) logDir.toFile().mkdirs();
+            File logDir = logPath.getParent().toFile();
+            if (!logDir.exists()) logDir.mkdirs();
 
-            FileHandler fileHandler = new FileHandler(logDir.resolve("OneOps-KeywhizCli-%g.log").toString(), 10 * 1024 * 1024, 2, true);
+            FileHandler fileHandler = new FileHandler(logPath.toString(), 10 * 1024 * 1024, 2, true);
             fileHandler.setLevel(Level.ALL);
             fileHandler.setFormatter(new BriefLogFormatter());
 
@@ -121,7 +118,7 @@ public class BriefLogFormatter extends Formatter {
 
             logger.info("");
             logger.info(">>>>> Starting Keywhiz CLI... <<<<<");
-            logger.info(() -> "Initialized the logger on" + DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.now()));
+            logger.info("Initialized the logger on" + DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.now()));
             initialized = true;
         } else {
             logger.info("Logger is already initialized!");

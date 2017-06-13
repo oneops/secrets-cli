@@ -19,6 +19,7 @@ package com.oneops;
 
 import com.oneops.cli.Context;
 import com.oneops.cli.Term;
+import com.oneops.config.CliConfig;
 import com.oneops.log.BriefLogFormatter;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.UserInterruptException;
@@ -91,7 +92,7 @@ public class Main {
         } catch (Throwable err) {
             log.log(Level.SEVERE, "Got unrecoverable error.", err);
             println(err("Oops..something went wrong!"));
-            println("Check the log (" + bold(BriefLogFormatter.logDir + "/OneOps-KeywhizCli-*.log") + ") for more details.");
+            println("Check the log (" + bold(CliConfig.logPath.toString()) + ") for more details.");
         } finally {// Restore the handlers.
         }
         exit(0);
