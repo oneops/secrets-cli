@@ -103,7 +103,7 @@ public class CliConfig {
                 "|" + gray(center("Built on " + jarManifest.getValue("Built-Date"), width)) + "|" + "\n" +
                 "+" + Strings.repeat("-", width) + "+" + "\n" +
                 "Type " + green("help") + " or " + green("?") +
-                " for help, " + green("exit") + " to exit.";
+                " for help, " + green("exit") + " to exit." + "\n";
     }
 }
 

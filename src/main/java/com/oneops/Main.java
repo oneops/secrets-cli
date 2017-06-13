@@ -33,8 +33,8 @@ import java.util.logging.Logger;
 import static com.oneops.cli.Context.cliCtx;
 import static com.oneops.cli.Term.*;
 import static com.oneops.config.CliConfig.banner;
-import static com.oneops.utils.Color.bold;
 import static com.oneops.utils.Color.err;
+import static com.oneops.utils.Color.yellow;
 import static com.oneops.utils.Common.*;
 
 /**
@@ -91,8 +91,8 @@ public class Main {
         } catch (UserInterruptException | EndOfFileException ignore) {
         } catch (Throwable err) {
             log.log(Level.SEVERE, "Got unrecoverable error.", err);
-            println(err("Oops..something went wrong!"));
-            println("Check the log (" + bold(CliConfig.logPath.toString()) + ") for more details.");
+            String logFile = CliConfig.logPath.toString().replace("%g", "0");
+            println(err("Oops..something went wrong!") + " Check the log (" + yellow(logFile) + ") for more details.");
         } finally {// Restore the handlers.
         }
         exit(0);
