@@ -63,7 +63,7 @@
         UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD: allow unused public/protected variables, but not private ones
 
       -->
-    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD,UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"/>
+    <Bug pattern="EI_EXPOSE_REP2,URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD,UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"/>
   </Match>
 
 </FindBugsFilter>
