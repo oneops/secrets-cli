@@ -35,6 +35,7 @@ public abstract class LoginRequest {
     @JsonProperty
     public abstract String username();
 
+    @SuppressWarnings("mutable")
     @JsonProperty
     public abstract char[] password();
 
