@@ -17,55 +17,26 @@
 package com.oneops.keywhiz;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.oneops.keywhiz.model.*;
-import com.oneops.security.XsrfTokenInterceptor;
-import okhttp3.*;
-import okhttp3.logging.HttpLoggingInterceptor;
-import okhttp3.logging.HttpLoggingInterceptor.Level;
+import okhttp3.Call;
+import okhttp3.HttpUrl;
+import okhttp3.Request;
 
-import javax.net.ssl.*;
 import java.io.IOException;
-import java.net.CookieManager;
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
-import static com.google.common.net.HttpHeaders.USER_AGENT;
 import static java.lang.String.format;
-import static java.net.CookiePolicy.ACCEPT_ALL;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Client for interacting with the Keywhiz Server.
  * <p>
  * Facilitates the manipulation of Clients, Groups, Secrets and the connections between them.
  */
-public class KeywhizClient {
-
-    public static final Logger log = Logger.getLogger(KeywhizClient.class.getSimpleName());
-
-    public static final MediaType JSON = MediaType.parse("application/json");
-
-    private static final ObjectMapper mapper = new ObjectMapper();
-
-    public static final CookieManager cookieMgr;
-
-    private final OkHttpClient client;
-
-    private final HttpUrl baseUrl;
-
-    static {
-        log.info("Initializing the cookie manager!");
-        cookieMgr = new CookieManager();
-        cookieMgr.setCookiePolicy(ACCEPT_ALL);
-    }
+public class KeywhizClient extends HttpClient {
 
     /**
      * Create a keywhiz client for the given baseurl.
@@ -74,53 +45,12 @@ public class KeywhizClient {
      * @throws GeneralSecurityException throws if any error creating the https client.
      */
     public KeywhizClient(String baseUrl) throws GeneralSecurityException {
-        log.info("Creating Keywhiz client for " + baseUrl);
-        this.client = createHttpsClient();
-        this.baseUrl = HttpUrl.parse(baseUrl);
+        super(baseUrl);
     }
 
-    /**
-     * Clear all cookies from cookie manager.
-     */
-    public static void clearCookies() {
-        log.warning("Clearing all cookies!");
-        cookieMgr.getCookieStore().removeAll();
-    }
-
-    /**
-     * Creates a {@link OkHttpClient} to start a TLS connection.
-     */
-    private OkHttpClient createHttpsClient() throws GeneralSecurityException {
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustManagerFactory.init(KeywhizTrustStore.getTrustStore());
-        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-
-        SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-        sslContext.init(new KeyManager[0], trustManagers, new SecureRandom());
-        SSLSocketFactory socketFactory = sslContext.getSocketFactory();
-
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(log::info);
-        loggingInterceptor.setLevel(Level.BASIC);
-
-        OkHttpClient.Builder client = new OkHttpClient().newBuilder()
-                .sslSocketFactory(socketFactory, (X509TrustManager) trustManagers[0])
-                .connectionSpecs(Collections.singletonList(ConnectionSpec.MODERN_TLS))
-                .followSslRedirects(false)
-                .retryOnConnectionFailure(false)
-                .connectTimeout(5, SECONDS)
-                .readTimeout(10, SECONDS)
-                .writeTimeout(10, SECONDS)
-                .addInterceptor(chain -> {
-                    Request req = chain.request().newBuilder()
-                            .addHeader(CONTENT_TYPE, JSON.toString())
-                            .addHeader(USER_AGENT, "OneOps-Keywhiz-Cli")
-                            .build();
-                    return chain.proceed(req);
-                })
-                .addInterceptor(loggingInterceptor)
-                .addNetworkInterceptor(new XsrfTokenInterceptor())
-                .cookieJar(new JavaNetCookieJar(cookieMgr));
-        return client.build();
+    @Override
+    public boolean isClientAuthEnabled() {
+        return false;
     }
 
     /**
@@ -287,136 +217,4 @@ public class KeywhizClient {
         Call call = client.newCall(new Request.Builder().get().url(url).build());
         return call.execute().code() != HttpStatus.SC_UNAUTHORIZED;
     }
-
-    /**
-     * Maps some of the common HTTP errors to the corresponding exceptions.
-     */
-    private void throwOnCommonError(int status) throws IOException {
-        switch (status) {
-            case HttpStatus.SC_BAD_REQUEST:
-                throw new MalformedRequestException();
-            case HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE:
-                throw new UnsupportedMediaTypeException();
-            case HttpStatus.SC_NOT_FOUND:
-                throw new NotFoundException();
-            case HttpStatus.SC_UNAUTHORIZED:
-                throw new UnauthorizedException();
-            case HttpStatus.SC_FORBIDDEN:
-                throw new ForbiddenException();
-            case HttpStatus.SC_CONFLICT:
-                throw new ConflictException();
-            case HttpStatus.SC_UNPROCESSABLE_ENTITY:
-                throw new ValidationException();
-        }
-        if (status >= 400) {
-            throw new IOException("Unexpected status code on response: " + status);
-        }
-    }
-
-    private String makeCall(Request request) throws IOException {
-        Response response = client.newCall(request).execute();
-        try {
-            throwOnCommonError(response.code());
-        } catch (IOException e) {
-            response.body().close();
-            throw e;
-        }
-        return response.body().string();
-    }
-
-    private String httpGet(HttpUrl url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-
-        return makeCall(request);
-    }
-
-    private String httpPost(HttpUrl url, Object content) throws IOException {
-        RequestBody body = RequestBody.create(JSON, mapper.writeValueAsString(content));
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .addHeader(CONTENT_TYPE, JSON.toString())
-                .build();
-
-        return makeCall(request);
-    }
-
-    private String httpPut(HttpUrl url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .put(RequestBody.create(MediaType.parse("text/plain"), ""))
-                .build();
-
-        return makeCall(request);
-    }
-
-    private String httpDelete(HttpUrl url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .delete()
-                .build();
-
-        return makeCall(request);
-    }
-
-
-    public static class MalformedRequestException extends IOException {
-
-        @Override
-        public String getMessage() {
-            return "Malformed request syntax from client (400)";
-        }
-    }
-
-    public static class UnauthorizedException extends IOException {
-
-        @Override
-        public String getMessage() {
-            return "Not allowed to login, password may be incorrect (401)";
-        }
-    }
-
-    public static class ForbiddenException extends IOException {
-
-        @Override
-        public String getMessage() {
-            return "Resource forbidden (403)";
-        }
-    }
-
-    public static class NotFoundException extends IOException {
-
-        @Override
-        public String getMessage() {
-            return "Resource not found (404)";
-        }
-    }
-
-    public static class UnsupportedMediaTypeException extends IOException {
-
-        @Override
-        public String getMessage() {
-            return "Resource media type is incorrect or incompatible (415)";
-        }
-    }
-
-    public static class ConflictException extends IOException {
-
-        @Override
-        public String getMessage() {
-            return "Conflicting resource (409)";
-        }
-    }
-
-    public static class ValidationException extends IOException {
-
-        @Override
-        public String getMessage() {
-            return "Malformed request semantics from client (422)";
-        }
-    }
-
 }
