@@ -32,9 +32,9 @@ public class LDAP {
     private char[] password;
     private String userBaseDN;
     private String userAttribute;
-    private TrustStore trustStore;
+    private KeyStoreConfig trustStore;
 
-    public LDAP(String server, int port, String userDN, char[] password, String userBaseDN, String userAttribute, TrustStore trustStore) {
+    public LDAP(String server, int port, String userDN, char[] password, String userBaseDN, String userAttribute, KeyStoreConfig trustStore) {
         this.server = server;
         this.port = port;
         this.userDN = userDN;
@@ -51,7 +51,7 @@ public class LDAP {
         this.password = config.getString("ldap.password").toCharArray();
         this.userBaseDN = config.getString("ldap.userBaseDN");
         this.userAttribute = config.getString("ldap.userAttribute");
-        this.trustStore = new TrustStore(config.getConfig("ldap.truststore"));
+        this.trustStore = new KeyStoreConfig(config.getConfig("ldap.truststore"));
     }
 
     public String getServer() {
@@ -78,7 +78,7 @@ public class LDAP {
         return userAttribute;
     }
 
-    public TrustStore getTrustStore() {
+    public KeyStoreConfig getTrustStore() {
         return trustStore;
     }
 

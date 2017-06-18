@@ -29,20 +29,25 @@ public class Keywhiz {
     private String baseUrl;
     private String svcUser;
     private char[] svcPasswd;
-    private TrustStore trustStore;
+    private KeyStoreConfig trustStore;
+    private KeyStoreConfig keyStore;
 
-    public Keywhiz(String baseUrl, String svcUser, char[] svcPasswd, TrustStore trustStore) {
+    public Keywhiz(String baseUrl, String svcUser, char[] svcPasswd, KeyStoreConfig trustStore, KeyStoreConfig keyStore) {
         this.baseUrl = baseUrl;
         this.svcUser = svcUser;
         this.svcPasswd = svcPasswd;
         this.trustStore = trustStore;
+        this.keyStore = keyStore;
     }
 
     public Keywhiz(Config config) {
         this.baseUrl = config.getString("keywhiz.baseUrl");
         this.svcUser = config.getString("keywhiz.svcUser");
         this.svcPasswd = config.getString("keywhiz.svcPasswd").toCharArray();
-        this.trustStore = new TrustStore(config.getConfig("keywhiz.truststore"));
+        this.trustStore = new KeyStoreConfig(config.getConfig("keywhiz.truststore"));
+        if (config.hasPath("keywhiz.keystore")) {
+            this.keyStore = new KeyStoreConfig(config.getConfig("keywhiz.keystore"));
+        }
     }
 
     public String getBaseUrl() {
@@ -57,17 +62,22 @@ public class Keywhiz {
         return svcPasswd;
     }
 
-    public TrustStore getTrustStore() {
+    public KeyStoreConfig getTrustStore() {
         return trustStore;
+    }
+
+    public KeyStoreConfig getKeyStore() {
+        return keyStore;
     }
 
     @Override
     public String toString() {
         return "Keywhiz{" +
                 "baseUrl='" + baseUrl + '\'' +
-                ", svcUser=********" +
-                ", svcPasswd=********" +
+                ", svcUser=*******" + '\'' +
+                ", svcPasswd=******" +
                 ", trustStore=" + trustStore +
+                ", keyStore=" + keyStore +
                 '}';
     }
 }

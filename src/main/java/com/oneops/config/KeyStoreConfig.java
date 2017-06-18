@@ -20,23 +20,23 @@ package com.oneops.config;
 import com.typesafe.config.Config;
 
 /**
- * Trust store config
+ * Keystore store config
  *
  * @author Suresh
  */
-public class TrustStore {
+public class KeyStoreConfig {
 
     private String name;
     private String type;
     private char[] password;
 
-    public TrustStore(String name, String type, char[] password) {
+    public KeyStoreConfig(String name, String type, char[] password) {
         this.name = name;
         this.type = type;
         this.password = password;
     }
 
-    public TrustStore(Config config) {
+    public KeyStoreConfig(Config config) {
         this.name = config.getString("path");
         this.type = config.getString("type");
         this.password = config.getString("password").toCharArray();
@@ -56,7 +56,7 @@ public class TrustStore {
 
     @Override
     public String toString() {
-        return "TrustStore{" +
+        return "KeyStore {" +
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 ", password=********" +
