@@ -14,4 +14,4 @@ target/
 .LSOverride
 
 ### Keywhiz-CLI Test fixtures ###
-src/main/resource/keywhiz_truststore.p12
+src/main/resource/*.p12
