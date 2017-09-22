@@ -1,6 +1,6 @@
 <div align="center">
 
-# :shell: OneOps Keywhiz CLI (WIP...)
+# :shell: OneOps Secrets CLI (WIP...)
 
  [![version][release-svg]][release-url] [![changelog][cl-svg]][cl-url] [![api-doc][apidoc-svg]][apidoc-url]
 
