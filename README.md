@@ -50,7 +50,7 @@ The API docs is generated under the [docs](docs/api), and can be published as
 
     
     ```
-     $ cd keywhiz-cli
+     $ cd secrets-cli
      $ ./mvnw clean javadoc:javadoc
     ```
 
