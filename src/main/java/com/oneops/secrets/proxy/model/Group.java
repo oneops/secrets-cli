@@ -26,6 +26,12 @@ import java.util.*;
  */
 public class Group {
 
+    /**
+     * Application metadata.
+     */
+    public static final String USERID_METADATA = "_userId";
+    public static final String DOMAIN_METADATA = "_domain";
+
     private final String name;
     private final String description;
     private final long createdAtSeconds;

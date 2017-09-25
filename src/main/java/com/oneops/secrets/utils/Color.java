@@ -157,6 +157,27 @@ public class Color {
      * OK option string.
      */
     public static String tick(String msg) {
-        return green("[✓] ") + msg;
+        return "[✓] " + msg;
+    }
+
+    /**
+     * No option string
+     */
+    public static String dash(String msg) {
+        return "[-] " + msg;
+    }
+
+    /**
+     * List item string.
+     */
+    public static String dot(String msg) {
+        return "\u25CF " + msg;
+    }
+
+    /**
+     * Formatted string with dot.
+     */
+    public static String circleDot(String msg) {
+        return "\u25C9 " + msg;
     }
 }

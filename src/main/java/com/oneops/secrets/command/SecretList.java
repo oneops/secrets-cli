@@ -22,8 +22,9 @@ import com.oneops.secrets.proxy.model.*;
 import io.airlift.airline.Command;
 
 import java.io.IOException;
+import java.util.List;
 
-import static com.oneops.secrets.utils.Color.*;
+import static com.oneops.secrets.utils.Color.sux;
 import static com.oneops.secrets.utils.Common.println;
 import static java.lang.String.format;
 
@@ -33,26 +34,20 @@ import static java.lang.String.format;
  * @author Suresh
  */
 @Command(name = "list", description = "List all secrets for the application.")
-public class List extends SecretsCommand {
+public class SecretList extends SecretsCommand {
 
     @Override
     public void exec() {
         try {
-            Result<java.util.List<Secret>> result = secretsClient.getAllSecrets(app);
+            Result<List<Secret>> result = secretsClient.getAllSecrets(app.getName());
             if (result.isSuccessful()) {
-                java.util.List<Secret> secrets = result.getBody();
-                println(sux(format("%d secrets are uploaded for the application %s.", secrets.size(), app)));
-
-                for (int i = 0; i < secrets.size(); i++) {
-                    Secret secret = secrets.get(i);
-                    println("[✓] " + secret.getName() + ", Desc: " + secret.getDescription() + ", Version: " + secret.getVersion());
-                    if (i > 50) {
-                        println(bold("..."));
-                        break;
-                    }
+                List<Secret> secrets = result.getBody();
+                println(sux(format("%d secrets are stored for application env: %s", secrets.size(), app.getNsPath())));
+                if (secrets.size() > 0) {
+                    println(Secret.getTable(secrets));
                 }
             } else {
-                throw new SecretsProxyException(result.getErr().getMessage());
+                throw new SecretsProxyException(this, result.getErr());
             }
         } catch (IOException ex) {
             throw new SecretsProxyException(ex);

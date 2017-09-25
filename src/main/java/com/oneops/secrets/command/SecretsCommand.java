@@ -18,12 +18,10 @@
 package com.oneops.secrets.command;
 
 import com.oneops.secrets.proxy.*;
+import com.oneops.secrets.proxy.model.App;
 import io.airlift.airline.Option;
 
 import java.util.logging.Logger;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static io.airlift.airline.OptionType.GLOBAL;
 
 /**
  * Abstract secrets command. OneOps application name (also known
@@ -35,11 +33,16 @@ public abstract class SecretsCommand implements Runnable {
 
     protected Logger log = Logger.getLogger(getClass().getSimpleName());
 
-    @Option(type = GLOBAL, name = "-a", title = "Application name", description = "OneOps App name (org_assembly_env), which you have secret-admin access", required = true)
-    public String app;
+    @Option(name = "-a", title = "Application name", description = "OneOps App name (org_assembly_env), which you have secret-admin access", required = true)
+    String appName;
 
-    @Option(type = GLOBAL, name = "-v", title = "Verbose", description = "Verbose mode")
+    @Option(name = "-v", title = "Verbose", description = "Verbose mode")
     public boolean verbose;
+
+    /**
+     * Holds application details.
+     */
+    public App app;
 
     /**
      * Secrets proxy client.
@@ -53,20 +56,8 @@ public abstract class SecretsCommand implements Runnable {
 
     @Override
     public void run() {
-        if (!getClass().isAssignableFrom(Version.class)) {
-            validateApp();
-            secretsClient = SecretsUtils.getSecretsClient();
-        }
+        app = new App(appName);
+        secretsClient = SecretsUtils.getSecretsClient(this);
         exec();
-    }
-
-    /**
-     * Helper method to validate the application name format on client side.
-     */
-    private void validateApp() {
-        String[] paths = app.split("_");
-        if (paths.length != 3 || isNullOrEmpty(paths[0]) || isNullOrEmpty(paths[1]) || isNullOrEmpty(paths[2])) {
-            throw new SecretsProxyException("Invalid application name: " + app + ". The format is 'org_assembly_env'.");
-        }
     }
 }

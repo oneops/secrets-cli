@@ -21,7 +21,7 @@
     </parent>
 
     <artifactId>secrets-cli</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>secrets-cli</name>
     <description>Command-line shell for managing secrets for authenticated OneOps users.</description>
     <url>https://github.com/oneops/secrets-cli</url>
@@ -52,6 +52,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <cli.name>secrets</cli.name>
         <guava.version>22.0</guava.version>
         <okhttp.version>3.9.0</okhttp.version>
         <moshi.version>1.5.0</moshi.version>
@@ -250,7 +251,7 @@
                 <version>1.4.1</version>
                 <configuration>
                     <flags>-Xmx1G -client -Djava.security.egd=file:/dev/./urandom</flags>
-                    <programFile>${project.artifactId}</programFile>
+                    <programFile>${cli.name}</programFile>
                 </configuration>
                 <executions>
                     <execution>

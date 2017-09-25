@@ -17,9 +17,9 @@
  *******************************************************************************/
 package com.oneops.secrets.proxy;
 
+import com.oneops.secrets.command.SecretsCommand;
 import com.oneops.secrets.config.CliConfig;
 import com.oneops.secrets.proxy.model.*;
-import com.oneops.secrets.utils.Platform;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -28,8 +28,8 @@ import java.security.GeneralSecurityException;
 import java.util.logging.Logger;
 
 import static com.oneops.secrets.utils.Color.*;
-import static com.oneops.secrets.utils.Platform.getUser;
-import static java.util.logging.Level.*;
+import static com.oneops.secrets.utils.Platform.*;
+import static java.util.logging.Level.WARNING;
 
 /**
  * Utility methods uses in commands.
@@ -40,22 +40,23 @@ public class SecretsUtils {
 
     private static Logger log = Logger.getLogger(SecretsUtils.class.getSimpleName());
 
-    private static Path secretsPath = Paths.get(Platform.getUserHome(), ".secrets-proxy-token");
+    private static Path secretsPath = Paths.get(getUserHome(), ".secrets-proxy.token");
 
     /**
      * Returns the authenticated {@link SecretsClient}. This method will
      * prompt for user password if it's not already authenticated.
      *
+     * @param cmd Command to be executed.
      * @return Authenticated secrets client.
      */
-    public static SecretsClient getSecretsClient() {
+    public static SecretsClient getSecretsClient(SecretsCommand cmd) {
         try {
             SecretsClient secretsClient = new SecretsClient(CliConfig.secretsProxy);
             String currentUser = getUser();
             String bearerToken = readToken();
 
             if (bearerToken != null) {
-                log.info("Using bearerToken from secrets path.");
+                log.info("Using bearer token from secrets path.");
                 // Validating the token user id.
                 Result<AuthUser> authUser = secretsClient.getAuthUser(bearerToken);
                 if (authUser.isSuccessful() && currentUser.equalsIgnoreCase(authUser.getBody().getUserName())) {
@@ -64,7 +65,7 @@ public class SecretsUtils {
                 }
             }
 
-            log.warning("BearerToken is not valid. Generating new token.");
+            log.warning("Bearer token is not valid. Generating new token.");
             String password = String.valueOf(readPassword(currentUser));
 
             Result<TokenRes> genToken = secretsClient.genToken(currentUser, password);
@@ -72,12 +73,10 @@ public class SecretsUtils {
                 writeToken(genToken.getBody().getAccessToken());
                 return secretsClient;
             } else {
-                throw new SecretsProxyException(genToken.getErr().getMessage());
+                throw new SecretsProxyException(cmd, genToken.getErr());
             }
-
         } catch (IOException | GeneralSecurityException ex) {
-            log.log(SEVERE, "Exception when creating secret client, " + ex.getMessage());
-            throw new SecretsProxyException(ex);
+            throw new SecretsProxyException("Error occurred talking to the OneOps Secret Proxy. See 'secrets log' for more details.", ex);
         }
     }
 
@@ -86,7 +85,7 @@ public class SecretsUtils {
      *
      * @return secrets proxy token or <code>null</code> if it can't find.
      */
-    public static @Nullable
+    private static @Nullable
     String readToken() {
         String token = null;
         try {
@@ -103,7 +102,7 @@ public class SecretsUtils {
      *
      * @param token auth token.
      */
-    public static void writeToken(String token) {
+    private static void writeToken(String token) {
         try {
             Files.write(secretsPath, token.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException ex) {
@@ -123,10 +122,10 @@ public class SecretsUtils {
      * @param user user who we are prompting a password for
      * @return user-inputted password
      */
-    public static char[] readPassword(String user) {
+    private static char[] readPassword(String user) {
         Console console = System.console();
         if (console != null) {
-            System.out.format("Password for %s %s", bold(green(user)), " : ");
+            System.out.format("Password for %s : ", bold(green(user)));
             return console.readPassword();
         } else {
             throw new RuntimeException("Can't read '" + user + "' password from console.");

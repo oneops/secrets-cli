@@ -1,6 +1,6 @@
 /*******************************************************************************
  *
- *   Copyright 2017 Walmart, Inc.
+ *   Copyright https://github.com/nedtwigg/asciitable
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,21 +15,14 @@
  *   limitations under the License.
  *
  *******************************************************************************/
-package com.oneops.secrets.command;
-
-import com.oneops.secrets.config.CliConfig;
-import io.airlift.airline.Command;
+package com.oneops.secrets.asciitable;
 
 /**
- * Shows secrets cli version info.
- *
- * @author Suresh
+ * Represents a horizontal alignment.
  */
-@Command(name = "version", description = "Show OneOps Secrets CLI version")
-public class Version implements Runnable {
+public enum Align {
+    LEFT, CENTER, RIGHT;
 
-    @Override
-    public void run() {
-        System.out.println(CliConfig.banner());
-    }
+    public static final Align HEADER_DEFAULT = CENTER;
+    public static final Align DATA_DEFAULT = LEFT;
 }

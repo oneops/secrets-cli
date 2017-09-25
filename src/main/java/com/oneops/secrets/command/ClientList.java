@@ -23,6 +23,7 @@ import io.airlift.airline.Command;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.oneops.secrets.utils.Color.*;
 import static com.oneops.secrets.utils.Common.println;
@@ -34,29 +35,28 @@ import static java.lang.String.format;
  * @author Suresh
  */
 @Command(name = "clients", description = "Show all clients for the application.")
-public class Clients extends SecretsCommand {
+public class ClientList extends SecretsCommand {
 
     @Override
     public void exec() {
         try {
-            Result<List<Client>> result = secretsClient.getAllClients(app);
+            Result<List<Client>> result = secretsClient.getAllClients(app.getName());
             if (result.isSuccessful()) {
                 List<Client> clients = result.getBody();
-                println(sux(format("%d computes (clients) are registered for the application %s.", clients.size(), app)));
+                println(sux(format("%d clients (computes) are registered for the application %s.", clients.size(), app.getNsPath())));
 
-                if (clients.size() == 0) {
-                    println(warn(format("Complete the '%s' application env deployment by adding 'secrets-client' component.", app)));
-                }
-                for (int i = 0; i < clients.size(); i++) {
-                    Client client = clients.get(i);
-                    println("[✓] " + client.getName());
-                    if (i > 10) {
-                        println(bold("..."));
-                        break;
+                if (clients.size() != 0) {
+                    int displayLimit = 50;
+                    if (clients.size() > displayLimit) {
+                        println(dim("Showing first " + displayLimit + " clients."));
+                        clients = clients.stream().limit(displayLimit).collect(Collectors.toList());
                     }
+                    println(Client.getTable(clients));
+                } else {
+                    println(dot(yellow(format("Complete the '%s' application env deployment by adding 'secrets-client' component.", app.getNsPath()))));
                 }
             } else {
-                throw new SecretsProxyException(result.getErr().getMessage());
+                throw new SecretsProxyException(this, result.getErr());
             }
         } catch (IOException ex) {
             throw new SecretsProxyException(ex);

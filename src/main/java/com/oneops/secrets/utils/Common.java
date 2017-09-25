@@ -23,7 +23,6 @@ import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import static com.google.common.base.Strings.*;
-import static com.oneops.secrets.utils.Color.green;
 
 /**
  * Common static utilities.
@@ -42,7 +41,7 @@ public class Common {
      *
      * @param str string message.
      */
-    public static void println(String str) {
+    public static void println(Object str) {
         System.out.println(str);
     }
 
@@ -53,17 +52,6 @@ public class Common {
      */
     public static void println(Supplier<String> stringSupplier) {
         System.out.println(stringSupplier.get());
-    }
-
-    /**
-     * Exits with error code.
-     *
-     * @param code error code.
-     */
-    public static void exit(int code) {
-        println(green("Goodbye!"));
-        log.info("Exiting Secrets CLI app...");
-        System.exit(code);
     }
 
     /**

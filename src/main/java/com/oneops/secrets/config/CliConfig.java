@@ -40,6 +40,8 @@ public class CliConfig {
 
     public static final Attributes jarManifest;
 
+    public static final String oneOpsBaseUrl;
+
     /**
      * Config initialization.
      */
@@ -48,6 +50,7 @@ public class CliConfig {
         jarManifest = readJarManifest();
         secretsProxy = new SecretsProxyConfig(appConfig);
         logPath = Paths.get(appConfig.getString("log.dir"), appConfig.getString("log.filePattern"));
+        oneOpsBaseUrl = appConfig.getString("oneops.baseUrl");
     }
 
     private CliConfig() {
@@ -75,8 +78,16 @@ public class CliConfig {
      * Formatted banner string for CLI
      */
     public static String banner() {
-        return "OneOps Secrets CLI " + bold("v" + jarManifest.getValue(IMPLEMENTATION_VERSION)) + "\n" +
-                gray("Built on " + jarManifest.getValue("Built-Date"));
+        return String.format("OneOps Secrets CLI: %s %n%s", cyan("v" + jarManifest.getValue(IMPLEMENTATION_VERSION)), gray("Built on " + jarManifest.getValue("Built-Date")));
+    }
+
+    /**
+     * Returns the current CLI version.
+     *
+     * @return version string.
+     */
+    public String getVersion() {
+        return jarManifest.getValue(IMPLEMENTATION_VERSION);
     }
 }
 

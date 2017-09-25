@@ -17,6 +17,10 @@
  *******************************************************************************/
 package com.oneops.secrets.proxy.model;
 
+import com.oneops.secrets.asciitable.*;
+
+import java.util.*;
+
 /**
  * Secrets application client
  *
@@ -81,5 +85,18 @@ public class Client {
                 ", updatedBy='" + updatedBy + '\'' +
                 ", lastSeenSeconds=" + lastSeenSeconds +
                 '}';
+    }
+
+
+    /**
+     * Returns formatted table string for list of clients.
+     *
+     * @param clients list of clients.
+     * @return formatted string.
+     */
+    public static String getTable(List<Client> clients) {
+        List<Column.Data<Client>> columns = Arrays.asList(new Column("Client Name").with(Client::getName),
+                new Column("Created By").with(Client::getCreatedBy));
+        return String.format("%s%s%n", System.lineSeparator(), Table.getTable(clients, columns));
     }
 }

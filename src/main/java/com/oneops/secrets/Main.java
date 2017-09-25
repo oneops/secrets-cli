@@ -20,13 +20,17 @@ package com.oneops.secrets;
 import com.oneops.secrets.command.*;
 import com.oneops.secrets.log.BriefLogFormatter;
 import com.oneops.secrets.proxy.SecretsProxyException;
+import com.oneops.secrets.proxy.model.*;
 import io.airlift.airline.*;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import static com.oneops.secrets.config.CliConfig.oneOpsBaseUrl;
 import static com.oneops.secrets.utils.Color.*;
 import static com.oneops.secrets.utils.Common.println;
+import static com.oneops.secrets.utils.Platform.getUser;
+import static java.lang.System.exit;
 import static java.util.logging.Level.SEVERE;
 
 /**
@@ -47,27 +51,76 @@ public class Main {
     private static void init() throws IOException {
         BriefLogFormatter.init();
         log = Logger.getLogger("Secrets-CLI");
+        log.info("Initializing secrets cli app.");
     }
 
     public static void main(String[] args) {
         try {
             init();
-            log.info("Initializing secrets cli app.");
             Cli.CliBuilder<Runnable> builder = Cli.<Runnable>builder("secrets")
                     .withDescription("CLI for managing OneOps application secrets")
                     .withDefaultCommand(Help.class)
-                    .withCommands(Add.class, List.class, Clients.class, Version.class, Help.class);
+                    .withCommands(SecretAdd.class,
+                            SecretList.class,
+                            ClientList.class,
+                            Version.class,
+                            TailLog.class,
+                            Help.class);
 
             Cli<Runnable> cliParser = builder.build();
             cliParser.parse(args).run();
+            exit(0);
 
         } catch (SecretsProxyException e) {
-            log.log(SEVERE, "Error while running the command.", e);
-            println(err(e.getMessage()));
+            printError(e);
         } catch (Throwable t) {
             log.log(SEVERE, "Error while running the command.", t);
             println(err(t.getMessage()));
             println("See " + bold("'secrets help'"));
         }
+        exit(-1);
+    }
+
+    /**
+     * Prints formatted string of common secrets cli client and server errors.
+     */
+    private static void printError(SecretsProxyException ex) {
+        log.log(SEVERE, "Error while running the command.", ex);
+        StringBuilder buf = new StringBuilder();
+        String lineSep = System.lineSeparator();
+
+        if (ex.getErr() != null && ex.getCmd() != null) {
+            App app = ex.getCmd().app;
+            ErrorRes err = ex.getErr();
+
+            buf.append(err(err.getMessage()));
+            switch (err.getStatus()) {
+                case 403: {
+                    buf.append(lineSep)
+                            .append(lineSep)
+                            .append("Verify the followings,")
+                            .append(lineSep)
+                            .append("  ")
+                            .append(yellow(dot(String.format("OneOps assembly '%s' exists.", app.getAssemblyNsPath().toLowerCase()))))
+                            .append(lineSep)
+                            .append("  ")
+                            .append(yellow(dot(String.format("User '%s' is part of '%s' organization.", getUser(), app.getOrg()))))
+                            .append(lineSep)
+                            .append("  ")
+                            .append(yellow(dot(String.format("User '%s' is part of 'secrets-admin' or 'secrets-admin-%s' team. Contact the org admin to create the team if it doesn't exist.", getUser(), app.getAssembly().toLowerCase()))))
+                            .append(lineSep)
+                            .append("  ")
+                            .append(yellow(dot(String.format("Secrets admin team you are part of is assigned to OneOps assembly %s", app.getTeamsUrl(oneOpsBaseUrl)))))
+                            .append(lineSep);
+                    break;
+                }
+                default:
+                    break;
+            }
+        } else {
+            buf.append(err(ex.getMessage()));
+        }
+
+        println(buf.toString());
     }
 }

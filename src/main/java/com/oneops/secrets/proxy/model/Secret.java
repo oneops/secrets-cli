@@ -17,7 +17,10 @@
  *******************************************************************************/
 package com.oneops.secrets.proxy.model;
 
-import java.util.Map;
+import com.oneops.secrets.asciitable.*;
+
+import java.time.*;
+import java.util.*;
 
 /**
  * Application secret
@@ -25,6 +28,13 @@ import java.util.Map;
  * @author Suresh G
  */
 public class Secret {
+
+    /**
+     * The attributes used in secret metadata
+     */
+    public static final String USERID_METADATA = "_userId";
+    public static final String DESC_METADATA = "_desc";
+    public static final String FILENAME_METADATA = "filename";
 
     private final String name;
     private final String description;
@@ -111,5 +121,40 @@ public class Secret {
                 ", expiry=" + expiry +
                 ", version=" + version +
                 '}';
+    }
+
+    /**
+     * Returns formatted table string for list of secrets.
+     *
+     * @param secrets list of secrets.
+     * @return formatted string.
+     */
+    public static String getTable(List<Secret> secrets) {
+        List<Column.Data<Secret>> columns = Arrays.asList(new Column("Secret Name").with(Secret::getName),
+                new Column("Description").with(Secret::getDescription),
+                new Column("UserID").with(s -> s.getMetadata().getOrDefault(USERID_METADATA, "N/A")),
+                new Column("Checksum").with(s -> s.checksum.substring(0, 6)),
+                new Column("Expiry").with(s -> expiry(s.expiry)),
+                new Column("Version").with(s -> String.valueOf(s.getVersion())));
+        return String.format("%s%s", System.lineSeparator(), Table.getTable(secrets, columns));
+    }
+
+    /**
+     * Table helper method.
+     */
+    private static String time(long atSeconds, String byUser) {
+        LocalDateTime date = LocalDateTime.ofEpochSecond(atSeconds, 0, OffsetTime.now().getOffset());
+        return (byUser != null ? byUser + " on " : "") + date;
+    }
+
+    /**
+     * Table helper method.
+     */
+    private static String expiry(long atMilli) {
+        if (atMilli != 0) {
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(atMilli), ZoneId.systemDefault()).toString();
+        } else {
+            return "Never";
+        }
     }
 }

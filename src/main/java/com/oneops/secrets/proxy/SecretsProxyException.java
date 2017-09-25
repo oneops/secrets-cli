@@ -17,6 +17,11 @@
  *******************************************************************************/
 package com.oneops.secrets.proxy;
 
+import com.oneops.secrets.command.SecretsCommand;
+import com.oneops.secrets.proxy.model.ErrorRes;
+
+import javax.annotation.*;
+
 /**
  * Exception thrown for any proxy server errors.
  *
@@ -24,8 +29,14 @@ package com.oneops.secrets.proxy;
  */
 public class SecretsProxyException extends RuntimeException {
 
-    public SecretsProxyException(String message) {
-        super(message);
+    private SecretsCommand cmd;
+
+    private ErrorRes err;
+
+    public SecretsProxyException(@Nonnull SecretsCommand cmd, @Nonnull ErrorRes err) {
+        super();
+        this.cmd = cmd;
+        this.err = err;
     }
 
     public SecretsProxyException(Throwable cause) {
@@ -34,5 +45,21 @@ public class SecretsProxyException extends RuntimeException {
 
     public SecretsProxyException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    /**
+     * Returns the {@link SecretsCommand} which caused the exception.
+     */
+    public @Nullable
+    SecretsCommand getCmd() {
+        return cmd;
+    }
+
+    /**
+     * Returns the {@link ErrorRes} which caused the exception.
+     */
+    public @Nullable
+    ErrorRes getErr() {
+        return err;
     }
 }

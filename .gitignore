@@ -24,4 +24,4 @@ nbdist/
 .nb-gradle/
 
 ### Ignore the Keystores
-src/main/resources/keystores/*
+src/main/resource/keystores/*.p12
