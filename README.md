@@ -13,21 +13,21 @@
 
 To use the Secrets CLI you download the executable JAR and place it in your `$PATH`. Use the 
 latest version available from
-[http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli](http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli)
+[https://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli](https://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli)
 e.g.:
 
 ```
-curl -o secrets-cli http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli/1.0.2/secrets-cli-1.0.2-executable.jar
+curl -o secrets http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli/1.0.2/secrets-cli-1.0.2-executable.jar
 
-chmod +x secrets-cli
+chmod +x secrets
 
-secrets-cli <options>
+secrets <options>
 ```
 
 To see what options are available for use the command without options:
 
 ```
-secrets-cli
+secrets
 ```
 
 ### Build
@@ -42,6 +42,7 @@ secrets-cli
     
 After a build the binary executables is located in the `target/` directory
 and name `secrets-cli-*-executable.jar`.
+
 
 - API Doc
 
