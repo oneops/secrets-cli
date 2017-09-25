@@ -8,52 +8,51 @@
 
 </div>
 
-### Download
 
-* Binary
+## Usage
 
-   [![Download][release-svg]][download-url]
+To use the Secrets CLI you download the executable JAR and place it in your `$PATH`. Use the 
+latest version available from
+[http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli](http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli)
+e.g.:
 
-   > After download, make sure to set the execute permission (`chmod +x keywhiz-cli`).
+```
+curl -o secrets-cli http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli/1.0.2/secrets-cli-1.0.2-executable.jar
+
+chmod +x secrets-cli
+
+secrets-cli <options>
+```
+
+To see what options are available for use the command without options:
+
+```
+secrets-cli
+```
 
 ### Build
 
 - Source
 
-    ```ruby
-     $ git clone https://github.com/oneops/keywhiz-cli
-     $ cd keywhiz-cli
+    ```
+     $ git clone https://github.com/oneops/secrets-cli
+     $ cd secrets-cli
      $ ./mvnw clean package
     ```
     
-    > The binary would be located at `target/keywhiz-cli`.
+After a build the binary executables is located in the `target/` directory
+and name `secrets-cli-*-executable.jar`.
 
 - API Doc
 
-    > The API docs would be generated under the [docs](docs/api), which can be published as [GitHub Pages][github-pages]
+The API docs is generated under the [docs](docs/api), and can be published as
+[GitHub Pages][github-pages].
+
     
-    ```ruby
+    ```
      $ cd keywhiz-cli
      $ ./mvnw clean javadoc:javadoc
     ```
-        
-### Usage
-
-* Help
-
-    ```ruby
-    $ keywhiz-cli
-    ```
-
-### Examples
-
-* Managing secrets 
-
-### Development
-
-
-### Testing
-
 
 
 -----------------
