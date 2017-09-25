@@ -24,7 +24,6 @@ import io.airlift.airline.*;
 import java.io.IOException;
 
 import static com.oneops.secrets.utils.Color.*;
-import static com.oneops.secrets.utils.Color.dot;
 import static com.oneops.secrets.utils.Common.println;
 import static java.lang.String.format;
 

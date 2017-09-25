@@ -18,16 +18,12 @@
 package com.oneops.secrets.command;
 
 import com.oneops.secrets.proxy.SecretsProxyException;
-import com.oneops.secrets.proxy.model.*;
+import com.oneops.secrets.proxy.model.Result;
 import io.airlift.airline.*;
 
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.Base64;
 
-import static com.oneops.secrets.proxy.SecretsUtils.validateSecret;
 import static com.oneops.secrets.utils.Color.*;
-import static com.oneops.secrets.utils.Color.dot;
 import static com.oneops.secrets.utils.Common.println;
 import static java.lang.String.format;
 
