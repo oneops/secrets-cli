@@ -140,6 +140,22 @@ public class Secret {
     }
 
     /**
+     * Returns formatted table string for list of secret versions.
+     *
+     * @param secrets list of secrets.
+     * @return formatted string.
+     */
+    public static String getVersionTable(List<Secret> secrets) {
+        List<Column.Data<Secret>> columns = Arrays.asList(new Column("Secret Name").with(Secret::getName),
+                new Column("Version").with(s -> String.valueOf(s.getVersion())),
+                new Column("Description").with(s -> s.getMetadata().getOrDefault(DESC_METADATA, "N/A")),
+                new Column("UserID").with(s -> s.getMetadata().getOrDefault(USERID_METADATA, "N/A")),
+                new Column("Checksum").with(s -> s.checksum.substring(0, 6)),
+                new Column("Expiry").with(s -> expiry(s.expiry)));
+        return String.format("%s%s", System.lineSeparator(), Table.getTable(secrets, columns));
+    }
+
+    /**
      * Table helper method.
      */
     private static String time(long atSeconds, String byUser) {

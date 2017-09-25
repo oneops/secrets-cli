@@ -25,7 +25,7 @@ import io.airlift.airline.Command;
  *
  * @author Suresh
  */
-@Command(name = "version", description = "Show OneOps Secrets CLI version")
+@Command(name = "info", description = "Show OneOps Secrets CLI version info.")
 public class Version implements Runnable {
 
     @Override

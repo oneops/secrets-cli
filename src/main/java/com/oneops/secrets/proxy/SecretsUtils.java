@@ -27,8 +27,10 @@ import java.nio.file.*;
 import java.security.GeneralSecurityException;
 import java.util.logging.Logger;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.oneops.secrets.utils.Color.*;
 import static com.oneops.secrets.utils.Platform.*;
+import static java.lang.String.format;
 import static java.util.logging.Level.WARNING;
 
 /**
@@ -77,6 +79,30 @@ public class SecretsUtils {
             }
         } catch (IOException | GeneralSecurityException ex) {
             throw new SecretsProxyException("Error occurred talking to the OneOps Secret Proxy. See 'secrets log' for more details.", ex);
+        }
+    }
+
+    /**
+     * Helper method to validate secrets file and it'e metadata.
+     *
+     * @param path secret file path
+     * @param name secret name to be used
+     * @param desc secret description.
+     */
+    public static void validateSecret(String path, String name, String desc) {
+        File secretsFile = Paths.get(path).toFile();
+
+        if (!secretsFile.exists() || secretsFile.isDirectory()) {
+            throw new IllegalArgumentException(format("Secret '%s' not exists or is a directory.", path));
+        }
+        if (secretsFile.length() > 100_000) {
+            throw new IllegalArgumentException(format("Secret '%s' is too large. It should be under 100KB.", path));
+        }
+        if (isNullOrEmpty(desc) || desc.length() > 64) {
+            throw new IllegalArgumentException(format("Secret '%s' description can't be empty or too long.", path));
+        }
+        if (name != null && name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Secret name is empty.");
         }
     }
 

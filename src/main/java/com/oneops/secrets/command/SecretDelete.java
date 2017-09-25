@@ -27,57 +27,47 @@ import java.util.Base64;
 
 import static com.oneops.secrets.proxy.SecretsUtils.validateSecret;
 import static com.oneops.secrets.utils.Color.*;
+import static com.oneops.secrets.utils.Color.dot;
 import static com.oneops.secrets.utils.Common.println;
 import static java.lang.String.format;
 
 /**
- * Add secrets for an application.
+ * Secret delete command
  *
  * @author Suresh
  */
-@Command(name = "add", description = "Add secret for an application.")
-public class SecretAdd extends SecretsCommand {
+@Command(name = "delete", description = "Delete a secret.")
+public class SecretDelete extends SecretsCommand {
 
-    @Arguments(title = "Secrets file", description = "Secrets file", required = true)
-    public String filePath;
-
-    @Option(name = "-d", title = "Description", description = "Secret description", required = true)
-    public String description;
-
-    @Option(name = "-n", title = "Secret name", description = "Secret name. If not set, file name will be used.")
+    @Arguments(title = "Secret name", description = "Secrets name", required = true)
     public String secretName;
 
     @Override
     public void exec() {
-        validateSecret(filePath, secretName, description);
-        Path path = Paths.get(filePath);
 
         try {
-            String secret = Base64.getEncoder().encodeToString(Files.readAllBytes(path));
-            SecretReq secReq = new SecretReq(secret, description, null, 0, "secret");
+            String in = System.console().readLine(warn("Delete secret operation is irrevocable. Do you want to proceed (y/n)? "));
+            if (in == null || !in.equalsIgnoreCase("y")) {
+                throw new IllegalStateException("Exiting");
+            }
 
-            secretName = (secretName != null) ? secretName : path.toFile().getName();
-            Result<Void> result = secretsClient.createSecret(app.getName(), secretName, true, secReq);
-
+            Result<Void> result = secretsClient.deleteSecret(app.getName(), secretName);
             if (result.isSuccessful()) {
                 StringBuilder buf = new StringBuilder();
                 String lineSep = System.lineSeparator();
-                buf.append(sux(format("Secret '%s' added successfully for application %s.", secretName, app.getNsPath())))
+                buf.append(sux(format("Deleted the secret '%s' for application %s.", secretName, app.getNsPath())))
                         .append(lineSep)
                         .append(lineSep)
                         .append("Note the followings,")
                         .append(lineSep)
                         .append("  ")
-                        .append(yellow(dot(String.format("Secret '%s' will be synced to '%s' env computes in few seconds.", secretName, app.getNsPath().toLowerCase()))))
-                        .append(lineSep)
-                        .append("  ")
-                        .append(yellow(dot(String.format("Applications can access secret content by reading '/secrets/%s' file.", secretName))))
+                        .append(yellow(dot(String.format("Secret '%s' will be removed from '%s' env computes in few seconds.", secretName, app.getNsPath().toLowerCase()))))
                         .append(lineSep)
                         .append("  ")
                         .append(yellow(dot("You may need to restart the application inorder for this secret change to take effect.")))
                         .append(lineSep)
                         .append("  ")
-                        .append(yellow(dot("For security reasons, secrets are never persisted on the disk and can access from '/secrets' virtual memory file system.")))
+                        .append(yellow(dot("Delete secret operation is irrevocable!!")))
                         .append(lineSep);
                 println(buf.toString());
 

@@ -61,7 +61,12 @@ public class Main {
                     .withDescription("CLI for managing OneOps application secrets")
                     .withDefaultCommand(Help.class)
                     .withCommands(SecretAdd.class,
+                            SecretUpdate.class,
+                            SecretDelete.class,
+                            SecretGet.class,
+                            SecretVersions.class,
                             SecretList.class,
+                            SecretRevert.class,
                             ClientList.class,
                             Version.class,
                             TailLog.class,

@@ -31,12 +31,12 @@ import static com.oneops.secrets.utils.Common.println;
 import static java.lang.String.format;
 
 /**
- * Add secrets for an application.
+ * Secret update command.
  *
  * @author Suresh
  */
-@Command(name = "add", description = "Add secret for an application.")
-public class SecretAdd extends SecretsCommand {
+@Command(name = "update", description = "Update an existing secret.")
+public class SecretUpdate extends SecretsCommand {
 
     @Arguments(title = "Secrets file", description = "Secrets file", required = true)
     public String filePath;
@@ -56,13 +56,18 @@ public class SecretAdd extends SecretsCommand {
             String secret = Base64.getEncoder().encodeToString(Files.readAllBytes(path));
             SecretReq secReq = new SecretReq(secret, description, null, 0, "secret");
 
+            String in = System.console().readLine(warn("You are going to update an existing secret. Do you want to proceed (y/n)? "));
+            if (in == null || !in.equalsIgnoreCase("y")) {
+                throw new IllegalStateException("Exiting");
+            }
+
             secretName = (secretName != null) ? secretName : path.toFile().getName();
-            Result<Void> result = secretsClient.createSecret(app.getName(), secretName, true, secReq);
+            Result<Void> result = secretsClient.updateSecret(app.getName(), secretName, secReq);
 
             if (result.isSuccessful()) {
                 StringBuilder buf = new StringBuilder();
                 String lineSep = System.lineSeparator();
-                buf.append(sux(format("Secret '%s' added successfully for application %s.", secretName, app.getNsPath())))
+                buf.append(sux(format("Updated the secret '%s' for application %s.", secretName, app.getNsPath())))
                         .append(lineSep)
                         .append(lineSep)
                         .append("Note the followings,")
@@ -77,7 +82,7 @@ public class SecretAdd extends SecretsCommand {
                         .append(yellow(dot("You may need to restart the application inorder for this secret change to take effect.")))
                         .append(lineSep)
                         .append("  ")
-                        .append(yellow(dot("For security reasons, secrets are never persisted on the disk and can access from '/secrets' virtual memory file system.")))
+                        .append(yellow(dot("You can revert back to previous version of the secret. Check 'secrets help' for more details.")))
                         .append(lineSep);
                 println(buf.toString());
 
