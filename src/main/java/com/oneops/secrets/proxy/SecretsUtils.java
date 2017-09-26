@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.oneops.secrets.utils.Color.*;
-import static com.oneops.secrets.utils.Platform.*;
+import static com.oneops.secrets.utils.Platform.getUserHome;
 import static java.lang.String.format;
 import static java.util.logging.Level.WARNING;
 
@@ -54,7 +54,7 @@ public class SecretsUtils {
     public static SecretsClient getSecretsClient(SecretsCommand cmd) {
         try {
             SecretsClient secretsClient = new SecretsClient(CliConfig.secretsProxy);
-            String currentUser = getUser();
+            String currentUser = cmd.user;
             String bearerToken = readToken();
 
             if (bearerToken != null) {

@@ -19,6 +19,7 @@ package com.oneops.secrets.command;
 
 import com.oneops.secrets.proxy.*;
 import com.oneops.secrets.proxy.model.App;
+import com.oneops.secrets.utils.Platform;
 import io.airlift.airline.Option;
 
 import java.util.logging.Logger;
@@ -35,6 +36,9 @@ public abstract class SecretsCommand implements Runnable {
 
     @Option(name = "-a", title = "Application name", description = "OneOps App name (org_assembly_env), which you have secret-admin access", required = true)
     String appName;
+
+    @Option(name = "-u", title = "User", description = "User name")
+    public String user = Platform.getUser();
 
     @Option(name = "-v", title = "Verbose", description = "Verbose mode")
     public boolean verbose;
