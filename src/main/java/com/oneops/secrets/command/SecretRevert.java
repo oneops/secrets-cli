@@ -68,7 +68,7 @@ public class SecretRevert extends SecretsCommand {
                         .append(yellow(dot("You may need to restart the application inorder for this secret change to take effect.")))
                         .append(lineSep)
                         .append("  ")
-                        .append(yellow(dot("You can revert back to previous version of the secret. Check 'secrets help' for more details.")))
+                        .append(yellow(dot("You can revert back to previous version of the secret. Check 'secrets help revert' for more details.")))
                         .append(lineSep);
                 println(buf.toString());
 

@@ -115,7 +115,7 @@ public class Main {
                             .append(yellow(dot(String.format("User '%s' is part of 'secrets-admin' or 'secrets-admin-%s' team. Contact the org admin to create the team if it doesn't exist.", getUser(), app.getAssembly().toLowerCase()))))
                             .append(lineSep)
                             .append("  ")
-                            .append(yellow(dot(String.format("Secrets admin team you are part of is assigned to OneOps assembly %s", app.getTeamsUrl(oneOpsBaseUrl)))))
+                            .append(yellow(dot(String.format("Secrets admin team that you are part of is assigned to '%s' assembly by navigating to %s", app.getAssembly(), app.getTeamsUrl(oneOpsBaseUrl)))))
                             .append(lineSep);
                     break;
                 }
