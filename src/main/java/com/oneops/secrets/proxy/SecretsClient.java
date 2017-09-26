@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import javax.net.ssl.*;
 import java.io.*;
 import java.lang.annotation.Annotation;
+import java.nio.file.*;
 import java.security.*;
 import java.util.List;
 import java.util.logging.Logger;
@@ -225,7 +226,8 @@ public class SecretsClient {
     private @Nullable
     KeyStore keyStoreFromResource(KeyStoreConfig config) {
         try {
-            try (InputStream ins = SecretsClient.class.getResourceAsStream(config.getName())) {
+            try (InputStream ins = config.isFileResource() ? Files.newInputStream(Paths.get(config.getName()))
+                    : SecretsClient.class.getResourceAsStream(config.getName())) {
                 log.info("Loading the trust-store: " + config.getName());
                 if (ins == null) {
                     throw new IllegalStateException("Can't find the trust-store for OneOps Secrets.");

@@ -26,14 +26,19 @@ import com.typesafe.config.Config;
  */
 public class KeyStoreConfig {
 
-    private String name;
-    private String type;
-    private char[] password;
+    private static final String FS_PREFIX = "file:";
+
+    private final String name;
+    private final String type;
+    private final char[] password;
+    private final boolean fileResource;
 
     public KeyStoreConfig(Config config) {
-        this.name = config.getString("path");
+        String path = config.getString("path");
         this.type = config.getString("type");
         this.password = config.getString("password").toCharArray();
+        this.name = path.replaceFirst(FS_PREFIX, "");
+        this.fileResource = path.toLowerCase().startsWith(FS_PREFIX);
     }
 
     public String getName() {
@@ -48,12 +53,22 @@ public class KeyStoreConfig {
         return password;
     }
 
+    /**
+     * Checks if the keystore config path is a file resource.
+     * Paths starts with <b>file://</b> identified as fs resource.
+     *
+     * @return <code>true</code> if the path is a file system resource.
+     */
+    public boolean isFileResource() {
+        return fileResource;
+    }
+
     @Override
     public String toString() {
-        return "KeyStore {" +
+        return "KeyStoreConfig{" +
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
-                ", password=********" +
+                ", fileResource=" + fileResource +
                 '}';
     }
 }
