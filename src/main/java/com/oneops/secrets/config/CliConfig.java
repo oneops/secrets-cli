@@ -86,7 +86,7 @@ public class CliConfig {
      *
      * @return version string.
      */
-    public String getVersion() {
+    public static String getVersion() {
         return jarManifest.getValue(IMPLEMENTATION_VERSION);
     }
 }

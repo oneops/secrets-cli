@@ -53,7 +53,17 @@ public class ClientList extends SecretsCommand {
                     }
                     println(Client.getTable(clients));
                 } else {
-                    println(dot(yellow(format("Complete the '%s' application env deployment by adding 'secrets-client' component.", app.getNsPath()))));
+                    StringBuilder buf = new StringBuilder();
+                    String lineSep = System.lineSeparator();
+                    buf.append(lineSep)
+                            .append("Verify the followings,")
+                            .append(lineSep)
+                            .append("  ")
+                            .append(yellow(dot(String.format("'secrets-client' component is added to '%s' platforms.", app.getAssembly()))))
+                            .append(lineSep)
+                            .append("  ")
+                            .append(yellow(dot(String.format("Completed the '%s' application env deployment.", app.getNsPath()))));
+                    println(buf.toString());
                 }
             } else {
                 throw new SecretsProxyException(this, result.getErr());

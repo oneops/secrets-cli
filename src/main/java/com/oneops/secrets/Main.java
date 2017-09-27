@@ -112,11 +112,16 @@ public class Main {
                             .append(yellow(dot(String.format("User '%s' is part of '%s' organization.", getUser(), app.getOrg()))))
                             .append(lineSep)
                             .append("  ")
-                            .append(yellow(dot(String.format("User '%s' is part of 'secrets-admin' or 'secrets-admin-%s' team. Contact the org admin to create the team if it doesn't exist.", getUser(), app.getAssembly().toLowerCase()))))
+                            .append(yellow(dot(String.format("User '%s' is part of 'secrets-admin' or 'secrets-admin-%s' team.", getUser(), app.getAssembly().toLowerCase()))))
+                            .append(lineSep)
+                            .append("    ")
+                            .append(yellow(String.format("Contact '%s' org admin to create the team(s) if it doesn't exist.", app.getOrg())))
                             .append(lineSep)
                             .append("  ")
-                            .append(yellow(dot(String.format("Secrets admin team that you are part of is assigned to '%s' assembly by navigating to %s", app.getAssembly(), app.getTeamsUrl(oneOpsBaseUrl)))))
-                            .append(lineSep);
+                            .append(yellow(dot(String.format("Secrets admin team that you are part of is assigned to '%s' assembly by navigating to", app.getAssembly()))))
+                            .append(lineSep)
+                            .append("    ")
+                            .append(yellow(app.getTeamsUrl(oneOpsBaseUrl)));
                     break;
                 }
                 default:

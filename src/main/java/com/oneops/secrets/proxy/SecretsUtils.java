@@ -98,8 +98,11 @@ public class SecretsUtils {
         if (secretsFile.length() > 100_000) {
             throw new IllegalArgumentException(format("Secret '%s' is too large. It should be under 100KB.", path));
         }
-        if (isNullOrEmpty(desc) || desc.length() > 64) {
-            throw new IllegalArgumentException(format("Secret '%s' description can't be empty or too long.", path));
+        if (isNullOrEmpty(desc)) {
+            throw new IllegalArgumentException(format("Secret '%s' description can't be empty.", path));
+        }
+        if (desc.length() > 64) {
+            throw new IllegalArgumentException(format("Secret '%s' description is too long (Max 64 chars).", path));
         }
         if (name != null && name.trim().isEmpty()) {
             throw new IllegalArgumentException("Secret name is empty.");
