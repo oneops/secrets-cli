@@ -49,7 +49,7 @@ $ secrets
   *  Add a secret for an application.
   
   ```ruby
-    $ $ secrets add -a oneops_test-assembly_dev logstash-forwarder.crt -d "Logstash cert" -n "Logstash-Cert"
+    $ secrets add -a oneops_test-assembly_dev logstash-forwarder.crt -d "Logstash cert" -n "Logstash-Cert"
     
       ✓ Secret 'Logstash-Cert' added successfully for application /oneops/test-assembly/dev.
       
@@ -80,7 +80,7 @@ $ secrets
 
 - Source
 
-    ```
+    ```ruby
      $ git clone https://github.com/oneops/secrets-cli
      $ cd secrets-cli
      $ ./mvnw clean package
