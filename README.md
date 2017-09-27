@@ -4,7 +4,7 @@
 
  [![version][release-svg]][release-url] [![java-doc][javadoc-svg]][javadoc-url] [![changelog][cl-svg]][cl-url] 
 
- A command line tool for managing [OneOps][oneops] applications secrets. It's a CLI interface for [OneOps Secrets Proxy](https://github.com/oneops/secrets-proxy) API - [https://oneops.github.com/secrets-proxy/apidocs](https://oneops.github.com/secrets-proxy/apidocs).
+ A command line tool for managing [OneOps][oneops] applications secrets. It's a CLI interface for [OneOps Secrets Proxy](https://github.com/oneops/secrets-proxy) API, [https://oneops.github.com/secrets-proxy/apidocs](https://oneops.github.com/secrets-proxy/apidocs).
 
 </div>
 
@@ -17,7 +17,7 @@ Use the latest version available from
 
 e.g.:
 
-```ruby
+```
 $ curl -o secrets http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli/1.0.2/secrets-cli-1.0.2-executable.jar
 $ chmod +x secrets
 $ secrets help
@@ -48,7 +48,7 @@ $ secrets
 
   *  Add a secret for an application.
   
-  ```ruby
+  ```
     $ secrets add -a oneops_test-assembly_dev logstash-forwarder.crt -d "Logstash cert" -n "Logstash-Cert"
     
       ✓ Secret 'Logstash-Cert' added successfully for application /oneops/test-assembly/dev.
@@ -62,7 +62,7 @@ $ secrets
   
   *  Show all secrets for an application.
   
-  ```ruby
+  ```
     $ secrets list  -a oneops_test-assembly_dev
     Password for testuser :
     ✓ 3 secrets are stored for application env: /oneops/test-assembly/dev
@@ -80,7 +80,7 @@ $ secrets
 
 - Source
 
-    ```ruby
+    ```
      $ git clone https://github.com/oneops/secrets-cli
      $ cd secrets-cli
      $ ./mvnw clean package
