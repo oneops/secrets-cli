@@ -1,35 +1,81 @@
 <div align="center">
 
-# :shell: OneOps Secrets CLI (WIP...)
+# :shell: OneOps Secrets CLI
 
- [![version][release-svg]][release-url] [![changelog][cl-svg]][cl-url] [![api-doc][apidoc-svg]][apidoc-url]
+ [![version][release-svg]][release-url] [![java-doc][javadoc-svg]][javadoc-url] [![changelog][cl-svg]][cl-url] 
 
-[Keywhiz][keywhiz] shell is a CLI program for managing application secrets in [OneOps][oneops]. Secrets associated with an assembly can be queried, added, removed using this CLI. Users can authenticate and use the CLI.
+ A command line tool for managing [OneOps][oneops] applications secrets.
 
 </div>
 
 
 ## Usage
 
-To use the Secrets CLI you download the executable JAR and place it in your `$PATH`. Use the 
-latest version available from
+To use the Secrets CLI you download the executable JAR and place it in your `$PATH`. 
+Use the latest version available from
 [https://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli](https://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli)
+
 e.g.:
 
-```
-curl -o secrets http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli/1.0.2/secrets-cli-1.0.2-executable.jar
-
-chmod +x secrets
-
-secrets <options>
+```ruby
+$ curl -o secrets http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli/1.0.2/secrets-cli-1.0.2-executable.jar
+$ chmod +x secrets
+$ secrets help
 ```
 
 To see what options are available for use the command without options:
 
+```ruby
+$ secrets
+  usage: secrets <command> [<args>]
+  
+  The most commonly used secrets commands are:
+      add        Add secret for an application.
+      clients    Show all clients for the application.
+      delete     Delete a secret.
+      get        Retrieve secret from vault.
+      help       Display help information
+      info       Show OneOps Secrets CLI version info.
+      list       List all secrets for the application.
+      log        Tail (no-follow) secrets cli log file.
+      revert     Revert secret to the given version index.
+      update     Update an existing secret.
+      versions   Retrieve versions of a secret, sorted from newest to oldest update time.
+  
+  See 'secrets help <command>' for more information on a specific command.
 ```
-secrets
-```
+### Examples
 
+  *  Add a secret for an application.
+  
+  ```ruby
+    $ $ secrets add -a oneops_test-assembly_dev logstash-forwarder.crt -d "Logstash cert" -n "Logstash-Cert"
+    
+      ✓ Secret 'Logstash-Cert' added successfully for application /oneops/test-assembly/dev.
+      
+      Note the followings,
+        ● Secret 'Logstash-Cert' will be synced to '/oneops/test-assembly/dev' env computes in few seconds.
+        ● Applications can access secret content by reading '/secrets/Logstash-Cert' file.
+        ● You may need to restart the application inorder for this secret change to take effect.
+        ● For security reasons, secrets are never persisted on the disk and can access from '/secrets' virtual memory file system.
+  ```
+  
+  *  Show all secrets for an application.
+  
+  ```ruby
+    $ secrets list  -a oneops_test-assembly_dev
+    Password for testuser :
+    ✓ 3 secrets are stored for application env: /oneops/test-assembly/dev
+    
+    +------------------------+---------------------+----------+----------+--------+---------+
+    |       Secret Name      |     Description     |  UserID  | Checksum | Expiry | Version |
+    +------------------------+---------------------+----------+----------+--------+---------+
+    | Logstash-Cert          | Logstash cert       | testuser | 5CCEB0   | Never  | 42295   |
+    | app-private.key        | app ssl key         | testuser | B69967   | Never  | 42227   |
+    | db-secret              | databse secret      | testuser | BE49B2   | Never  | 42239   |
+    +------------------------+---------------------+----------+----------+--------+---------+
+  ```
+  
 ### Build
 
 - Source
@@ -40,20 +86,7 @@ secrets
      $ ./mvnw clean package
     ```
     
-After a build the binary executables is located in the `target/` directory
-and name `secrets-cli-*-executable.jar`.
-
-
-- API Doc
-
-The API docs is generated under the [docs](docs/api), and can be published as
-[GitHub Pages][github-pages].
-
-    
-    ```
-     $ cd secrets-cli
-     $ ./mvnw clean javadoc:javadoc
-    ```
+After a build the binary executables is located in the `target/` directory and name `secrets-cli-*-executable.jar`.
 
 
 -----------------
@@ -64,28 +97,15 @@ The API docs is generated under the [docs](docs/api), and can be published as
 [oneops]: http://oneops.com/
 [keywhiz]: https://github.com/square/keywhiz
 
-[apidoc-url]: https://oneops.github.io/keywhiz-cli/api
-[apidoc-svg]: https://img.shields.io/badge/api--doc-latest-ff69b4.svg?style=flat-square
+[javadoc-url]: https://oneops.github.io/secrets-cli/api
+[javadoc-svg]: https://img.shields.io/badge/api--doc-latest-ff69b4.svg?style=flat-square
 
-[cl-url]: https://github.com/oneops/keywhiz-cli/blob/master/CHANGELOG.md#011---2017-05-31
-[cl-svg]: https://img.shields.io/badge/change--log-0.1.1-blue.svg?style=flat-square
+[cl-url]: https://github.com/oneops/secrets-cli/blob/master/CHANGELOG.md
+[cl-svg]: https://img.shields.io/badge/change--log-latest-blue.svg?style=flat-square
 
-[release-url]: https://github.com/oneops/keywhiz-cli/releases/latest
-[download-url]: https://github.com/oneops/keywhiz-cli/releases/download/0.1.1/keywhiz-cli
-[release-svg]: https://img.shields.io/github/release/oneops/keywhiz-cli.svg?style=flat-square
-
-[execjar-url]: https://github.com/oneops/keywhiz-cli/releases/download/0.1.1/keywhiz-cli.jar
-[execjar-svg]: https://img.shields.io/badge/exec--jar-0.1.1-00BCD4.svg?style=flat-square
-
-[license-url]: https://github.com/oneops/keywhiz-cli/blob/master/LICENSE
-[license-svg]: https://img.shields.io/github/license/oneops/keywhiz-cli.svg?style=flat-square
-
-[total-dl-url]: https://github.com/oneops/keywhiz-cli/releases
-[total-dl-svg]: https://img.shields.io/github/downloads/oneops/keywhiz-cli/total.svg?style=flat-square
+[release-url]: https://github.com/oneops/secrets-cli/releases/latest
+[release-svg]: https://img.shields.io/github/release/oneops/secrets-cli.svg?style=flat-square
 
 [java-download]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
-[github-token]: https://github.com/settings/tokens
-[github-pages]: https://pages.github.com/
-[github-pages-pub]: https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/
 
