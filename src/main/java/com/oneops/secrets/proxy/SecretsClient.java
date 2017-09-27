@@ -36,6 +36,7 @@ import java.security.*;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static okhttp3.logging.HttpLoggingInterceptor.Level.BASIC;
@@ -59,7 +60,8 @@ public class SecretsClient {
     private Converter<ResponseBody, ErrorRes> errResConverter;
 
     public SecretsClient(SecretsProxyConfig config) throws GeneralSecurityException {
-        log.info("Initializing the Secrets client for " + config.getBaseUrl());
+        String version = CliConfig.getVersion();
+        log.info(format("Initializing the Secrets client %s for %s", version, config.getBaseUrl()));
         this.config = config;
 
         Moshi moshi = new Moshi.Builder().add(new DateAdapter()).build();
@@ -81,11 +83,11 @@ public class SecretsClient {
                 .connectTimeout(timeout, SECONDS)
                 .readTimeout(timeout, SECONDS)
                 .writeTimeout(timeout, SECONDS)
-                .addInterceptor(logIntcp)
+                .addNetworkInterceptor(logIntcp)
                 .addInterceptor(chain -> {
                     Request.Builder reqBuilder = chain.request().newBuilder()
                             .addHeader("Content-Type", "application/json")
-                            .addHeader("User-Agent", "OneOps Secrets CLI");
+                            .addHeader("User-Agent", "OneOpsSecretsCLI-" + version);
                     if (authToken != null) {
                         reqBuilder.addHeader("X-Authorization", "Bearer " + authToken);
                     }
