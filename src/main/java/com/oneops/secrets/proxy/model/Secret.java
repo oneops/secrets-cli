@@ -22,6 +22,8 @@ import com.oneops.secrets.asciitable.*;
 import java.time.*;
 import java.util.*;
 
+import static com.oneops.secrets.proxy.SecretsUtils.dateFormatter;
+
 /**
  * Application secret
  *
@@ -130,7 +132,8 @@ public class Secret {
      * @return formatted string.
      */
     public static String getTable(List<Secret> secrets) {
-        List<Column.Data<Secret>> columns = Arrays.asList(new Column("Secret Name").with(Secret::getName),
+        List<Column.Data<Secret>> columns = Arrays.asList(
+                new Column("Secret Name").with(Secret::getName),
                 new Column("Description").with(Secret::getDescription),
                 new Column("UserID").with(s -> s.getMetadata().getOrDefault(USERID_METADATA, "N/A")),
                 new Column("Checksum").with(s -> s.checksum.substring(0, 6)),
@@ -146,7 +149,8 @@ public class Secret {
      * @return formatted string.
      */
     public static String getVersionTable(List<Secret> secrets) {
-        List<Column.Data<Secret>> columns = Arrays.asList(new Column("Secret Name").with(Secret::getName),
+        List<Column.Data<Secret>> columns = Arrays.asList(
+                new Column("Secret Name").with(Secret::getName),
                 new Column("Version").with(s -> String.valueOf(s.getVersion())),
                 new Column("Description").with(s -> s.getMetadata().getOrDefault(DESC_METADATA, "N/A")),
                 new Column("UserID").with(s -> s.getMetadata().getOrDefault(USERID_METADATA, "N/A")),
@@ -156,11 +160,35 @@ public class Secret {
     }
 
     /**
+     * Returns formatted table string for the given secret details.
+     * The table is inverted as there are many columns. For 'Updated By'
+     * user, we are using a custom metadata attribute because of the
+     * Keywhiz limitation.
+     *
+     * @return formatted string.
+     */
+    public static String getTable(Secret secretDetails) {
+
+        String[] header = {"Secret Name", secretDetails.name};
+        String[][] data = {
+                {"Description", secretDetails.description},
+                {"Created By", secretDetails.createdBy},
+                {"Created At", time(secretDetails.createdAtSeconds)},
+                {"Updated By", secretDetails.getMetadata().getOrDefault(USERID_METADATA, "N/A")},
+                {"Updated At", time(secretDetails.updatedAtSeconds)},
+                {"Checksum", secretDetails.checksum},
+                {"Type", secretDetails.type},
+                {"Expiry", expiry(secretDetails.expiry)},
+                {"Version", String.valueOf(secretDetails.version)},
+        };
+        return String.format("%s%s", System.lineSeparator(), Table.getTable(header, data));
+    }
+
+    /**
      * Table helper method.
      */
-    private static String time(long atSeconds, String byUser) {
-        LocalDateTime date = LocalDateTime.ofEpochSecond(atSeconds, 0, OffsetTime.now().getOffset());
-        return (byUser != null ? byUser + " on " : "") + date;
+    private static String time(long atSeconds) {
+        return ZonedDateTime.ofInstant(Instant.ofEpochSecond(atSeconds), ZoneId.systemDefault()).format(dateFormatter);
     }
 
     /**
@@ -168,7 +196,7 @@ public class Secret {
      */
     private static String expiry(long atMilli) {
         if (atMilli != 0) {
-            return LocalDateTime.ofInstant(Instant.ofEpochMilli(atMilli), ZoneId.systemDefault()).toString();
+            return ZonedDateTime.ofInstant(Instant.ofEpochMilli(atMilli), ZoneId.systemDefault()).format(dateFormatter);
         } else {
             return "Never";
         }

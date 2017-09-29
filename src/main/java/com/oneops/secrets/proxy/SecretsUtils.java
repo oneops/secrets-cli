@@ -25,12 +25,14 @@ import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.file.*;
 import java.security.GeneralSecurityException;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.oneops.secrets.utils.Color.*;
 import static com.oneops.secrets.utils.Platform.getUserHome;
 import static java.lang.String.format;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.logging.Level.WARNING;
 
 /**
@@ -43,6 +45,8 @@ public class SecretsUtils {
     private static Logger log = Logger.getLogger(SecretsUtils.class.getSimpleName());
 
     private static Path secretsPath = Paths.get(getUserHome(), ".secrets-proxy.token");
+
+    public static final DateTimeFormatter dateFormatter = ofPattern("yyyy-MM-dd HH:mm:ss z");
 
     /**
      * Returns the authenticated {@link SecretsClient}. This method will

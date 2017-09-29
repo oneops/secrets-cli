@@ -24,6 +24,7 @@ import io.airlift.airline.Command;
 import java.io.IOException;
 import java.util.List;
 
+import static com.oneops.secrets.utils.Color.bold;
 import static com.oneops.secrets.utils.Color.sux;
 import static com.oneops.secrets.utils.Common.println;
 import static java.lang.String.format;
@@ -45,6 +46,7 @@ public class SecretList extends SecretsCommand {
                 println(sux(format("%d secrets are stored for application env: %s", secrets.size(), app.getNsPath())));
                 if (secrets.size() > 0) {
                     println(Secret.getTable(secrets));
+                    println(String.format("To get the secret details, run %s", bold("secrets details  -a <app name> -secret <secret name>")));
                 }
             } else {
                 throw new SecretsProxyException(this, result.getErr());

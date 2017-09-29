@@ -19,7 +19,10 @@ package com.oneops.secrets.proxy.model;
 
 import com.oneops.secrets.asciitable.*;
 
+import java.time.*;
 import java.util.*;
+
+import static com.oneops.secrets.proxy.SecretsUtils.dateFormatter;
 
 /**
  * Secrets application client
@@ -95,8 +98,35 @@ public class Client {
      * @return formatted string.
      */
     public static String getTable(List<Client> clients) {
-        List<Column.Data<Client>> columns = Arrays.asList(new Column("Client Name").with(Client::getName),
+        List<Column.Data<Client>> columns = Arrays.asList(
+                new Column("Client Name").with(Client::getName),
                 new Column("Created By").with(Client::getCreatedBy));
-        return String.format("%s%s%n", System.lineSeparator(), Table.getTable(clients, columns));
+        return String.format("%s%s", System.lineSeparator(), Table.getTable(clients, columns));
+    }
+
+    /**
+     * Returns formatted table string for the given client details.
+     * The table is inverted as there are many columns.
+     *
+     * @return formatted string.
+     */
+    public static String getTable(Client clientDetails) {
+        String[] header = {"Client Name", clientDetails.name};
+        String[][] data = {
+                {"Description", clientDetails.description},
+                {"Created By", clientDetails.createdBy},
+                {"Created At", time(clientDetails.createdAtSeconds)},
+                {"Updated By", clientDetails.updatedBy},
+                {"Updated At", time(clientDetails.updatedAtSeconds)},
+                {"Last seen", time(clientDetails.lastSeenSeconds)},
+        };
+        return String.format("%s%s", System.lineSeparator(), Table.getTable(header, data));
+    }
+
+    /**
+     * Table helper method.
+     */
+    private static String time(long atSeconds) {
+        return ZonedDateTime.ofInstant(Instant.ofEpochSecond(atSeconds), ZoneId.systemDefault()).format(dateFormatter);
     }
 }

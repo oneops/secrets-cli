@@ -68,6 +68,7 @@ public class Main {
                             SecretList.class,
                             SecretRevert.class,
                             ClientList.class,
+                            Details.class,
                             Version.class,
                             TailLog.class,
                             Help.class);

@@ -43,6 +43,7 @@ public class ClientList extends SecretsCommand {
             Result<List<Client>> result = secretsClient.getAllClients(app.getName());
             if (result.isSuccessful()) {
                 List<Client> clients = result.getBody();
+                String lineSep = System.lineSeparator();
                 println(sux(format("%d clients (computes) are registered for the application %s.", clients.size(), app.getNsPath())));
 
                 if (clients.size() != 0) {
@@ -52,9 +53,10 @@ public class ClientList extends SecretsCommand {
                         clients = clients.stream().limit(displayLimit).collect(Collectors.toList());
                     }
                     println(Client.getTable(clients));
+                    println(String.format("To get the client details, run %s", bold("secrets details  -a <app name> -client <client name>")));
+
                 } else {
                     StringBuilder buf = new StringBuilder();
-                    String lineSep = System.lineSeparator();
                     buf.append(lineSep)
                             .append("Verify the followings,")
                             .append(lineSep)
