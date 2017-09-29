@@ -4,7 +4,7 @@
 
  [![version][release-svg]][release-url] [![java-doc][javadoc-svg]][javadoc-url] [![changelog][cl-svg]][cl-url] 
 
- A command line tool for managing [OneOps][oneops] applications secrets. It's a CLI interface for [OneOps Secrets Proxy](https://github.com/oneops/secrets-proxy) API, [https://oneops.github.com/secrets-proxy/apidocs](https://oneops.github.com/secrets-proxy/apidocs).
+ A command line tool for managing [OneOps][oneops] applications secrets. It's a CLI interface for [OneOps Secrets Proxy](https://github.com/oneops/secrets-proxy) API, [Secrets Proxy Swagger Apidocs](https://oneops.github.com/secrets-proxy/apidocs).
 
 </div>
 
@@ -27,22 +27,23 @@ To see what options are available for use the command without options:
 
 ```ruby
 $ secrets
-  usage: secrets <command> [<args>]
-  
-  The most commonly used secrets commands are:
-      add        Add secret for an application.
-      clients    Show all clients for the application.
-      delete     Delete a secret.
-      get        Retrieve secret from vault.
-      help       Display help information
-      info       Show OneOps Secrets CLI version info.
-      list       List all secrets for the application.
-      log        Tail (no-follow) secrets cli log file.
-      revert     Revert secret to the given version index.
-      update     Update an existing secret.
-      versions   Retrieve versions of a secret, sorted from newest to oldest update time.
-  
-  See 'secrets help <command>' for more information on a specific command.
+usage: secrets <command> [<args>]
+
+The most commonly used secrets commands are:
+    add        Add secret for an application.
+    clients    Show all clients for the application.
+    delete     Delete a secret.
+    details    Get a client/secret details for an application.
+    get        Retrieve secret from vault.
+    help       Display help information
+    info       Show OneOps Secrets CLI version info.
+    list       List all secrets for the application.
+    log        Tail (no-follow) secrets cli log file.
+    revert     Revert secret to the given version index.
+    update     Update an existing secret.
+    versions   Retrieve versions of a secret, sorted from newest to oldest update time.
+
+See 'secrets help <command>' for more information on a specific command.
 ```
 ### Examples
 
