@@ -47,7 +47,7 @@ See 'secrets help <command>' for more information on a specific command.
 ```
 ### Examples
 
-  <img src="docs/images/secrets-cli.gif" width=750 height=500>
+  <img src="docs/images/secrets-cli.gif" width=874 height=491>
   
   *  Add a secret for an application.
   
