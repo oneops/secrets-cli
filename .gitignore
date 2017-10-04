@@ -1,5 +1,6 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
+.fbExcludeFilterFile
 
 ### STS ###
 .apt_generated
