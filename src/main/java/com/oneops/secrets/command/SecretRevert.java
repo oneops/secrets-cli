@@ -53,22 +53,22 @@ public class SecretRevert extends SecretsCommand {
             if (result.isSuccessful()) {
                 StringBuilder buf = new StringBuilder();
                 String lineSep = System.lineSeparator();
-                buf.append(sux(format("Reverted the secret '%s' version to '%d' for application %s.", secretName, version, app.getNsPath())))
+                buf.append(sux(format("Reverted the secret '%s' version to '%d' for the application %s.", secretName, version, app.getNsPath())))
                         .append(lineSep)
                         .append(lineSep)
-                        .append("Note the followings,")
+                        .append("Note the following:")
                         .append(lineSep)
                         .append("  ")
-                        .append(yellow(dot(String.format("Secret '%s' version '%d' will be synced to '%s' env computes in few seconds.", secretName, version, app.getNsPath().toLowerCase()))))
+                        .append(yellow(dot(String.format("Secret '%s' version '%d' will be synced to '%s' environment computes in a few seconds.", secretName, version, app.getNsPath().toLowerCase()))))
                         .append(lineSep)
                         .append("  ")
                         .append(yellow(dot(String.format("Applications can access secret content by reading '/secrets/%s' file.", secretName))))
                         .append(lineSep)
                         .append("  ")
-                        .append(yellow(dot("You may need to restart the application inorder for this secret change to take effect.")))
+                        .append(yellow(dot("You may need to restart the application in order for this secret change to take effect.")))
                         .append(lineSep)
                         .append("  ")
-                        .append(yellow(dot("You can revert back to previous version of the secret. Check 'secrets help revert' for more details.")))
+                        .append(yellow(dot("You can revert back to a previous version of the secret. Check 'secrets help revert' for more details.")))
                         .append(lineSep);
                 println(buf.toString());
 

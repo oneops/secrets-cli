@@ -43,7 +43,7 @@ public class SecretList extends SecretsCommand {
             Result<List<Secret>> result = secretsClient.getAllSecrets(app.getName());
             if (result.isSuccessful()) {
                 List<Secret> secrets = result.getBody();
-                println(sux(format("%d secrets are stored for application env: %s", secrets.size(), app.getNsPath())));
+                println(sux(format("%d secrets are stored for the application environments: %s", secrets.size(), app.getNsPath())));
                 if (secrets.size() > 0) {
                     println(Secret.getTable(secrets));
                     println(String.format("To get the secret details, run %s", bold("secrets details  -a <app name> -secret <secret name>")));
