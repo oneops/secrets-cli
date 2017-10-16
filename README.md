@@ -12,9 +12,6 @@ OneOps Secrets CLI interacts with the
 [OneOps Secrets Proxy](http://oneops.com/user/account/secrets-proxy.html) API.
  [Secrets Proxy Swagger Apidocs]().
 
-</div>
-
-
 ## Usage
 
 Detailed user documentation for installation and usage is available on the 
@@ -89,10 +86,6 @@ See 'secrets help <command>' for more information on a specific command.
     ```
     
 After a build the binary executables is located in the `target/` directory and name `secrets-cli-*-executable.jar`.
-
-
------------------
-<sup><b>**</b></sup>Require [Java 8 or later][java-download]
 
 <!-- Badges -->
 
