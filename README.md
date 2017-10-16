@@ -2,28 +2,24 @@
 
 # :shell: OneOps Secrets CLI
 
- [![version][release-svg]][release-url] [![java-doc][javadoc-svg]][javadoc-url] [![changelog][cl-svg]][cl-url] 
+Releases, Javadoc and more in
+[![Maven Central](https://img.shields.io/maven-central/v/com.oneops/secrets-cli.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.oneops%22%20AND%20a%3A%22secrets-cli%22)
 
- A command line tool for managing [OneOps][oneops] applications secrets. It's a CLI interface for [OneOps Secrets Proxy](https://github.com/oneops/secrets-proxy) API, [Secrets Proxy Swagger Apidocs](https://oneops.github.com/secrets-proxy/apidocs).
+[![changelog][cl-svg]][cl-url] 
+
+A command line tool for managing [OneOps](http://oneos.com) application secrets.
+OneOps Secrets CLI interacts with the
+[OneOps Secrets Proxy](http://oneops.com/user/account/secrets-proxy.html) API.
+ [Secrets Proxy Swagger Apidocs]().
 
 </div>
 
 
 ## Usage
 
-To use the Secrets CLI you download the executable JAR and place it in your `$PATH`. 
-Use the latest version available from
-[https://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli](https://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli)
-
-e.g.:
-
-```
-$ curl -o secrets http://repo1.maven.org/maven2/com/oneops/secrets-cli/secrets-cli/1.0.2/secrets-cli-1.0.2-executable.jar
-$ chmod +x secrets
-$ secrets help
-```
-
-To see what options are available for use the command without options:
+Detailed user documentation for installation and usage is available on the 
+[OneOps website](http://oneops.com/user/design/secrets-client-component) as well
+as via the help function:
 
 ```ruby
 $ secrets
@@ -45,6 +41,7 @@ The most commonly used secrets commands are:
 
 See 'secrets help <command>' for more information on a specific command.
 ```
+
 ### Examples
 
   <img src="docs/images/secrets-cli.gif" width=874 height=491>
@@ -99,18 +96,6 @@ After a build the binary executables is located in the `target/` directory and n
 
 <!-- Badges -->
 
-[oneops]: http://oneops.com/
-[keywhiz]: https://github.com/square/keywhiz
-
-[javadoc-url]: https://oneops.github.io/secrets-cli/api
-[javadoc-svg]: https://img.shields.io/badge/api--doc-latest-ff69b4.svg?style=flat-square
-
 [cl-url]: https://github.com/oneops/secrets-cli/blob/master/CHANGELOG.md
 [cl-svg]: https://img.shields.io/badge/change--log-latest-blue.svg?style=flat-square
-
-[release-url]: https://github.com/oneops/secrets-cli/releases/latest
-[release-svg]: https://img.shields.io/github/release/oneops/secrets-cli.svg?style=flat-square
-
-[java-download]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
-
 
