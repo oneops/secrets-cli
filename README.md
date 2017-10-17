@@ -1,5 +1,3 @@
-<div align="center">
-
 # :shell: OneOps Secrets CLI
 
 Releases, Javadoc and more in
