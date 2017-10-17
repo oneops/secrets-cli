@@ -42,7 +42,7 @@ public class SecretDelete extends SecretsCommand {
     public void exec() {
 
         try {
-            String in = System.console().readLine(warn("Delete secret operation is irrevocable. Do you want to proceed (y/n)? "));
+            String in = System.console().readLine(warn("The delete secret operation is irrevocable. Do you want to proceed (y/n)? "));
             if (in == null || !in.equalsIgnoreCase("y")) {
                 throw new IllegalStateException("Exiting");
             }
@@ -54,13 +54,13 @@ public class SecretDelete extends SecretsCommand {
                 buf.append(sux(format("Deleted the secret '%s' for application %s.", secretName, app.getNsPath())))
                         .append(lineSep)
                         .append(lineSep)
-                        .append("Note the followings,")
+                        .append("Note the following:")
                         .append(lineSep)
                         .append("  ")
-                        .append(yellow(dot(String.format("Secret '%s' will be removed from '%s' env computes in few seconds.", secretName, app.getNsPath().toLowerCase()))))
+                        .append(yellow(dot(String.format("Secret '%s' will be removed from '%s' env computes in a few seconds.", secretName, app.getNsPath().toLowerCase()))))
                         .append(lineSep)
                         .append("  ")
-                        .append(yellow(dot("You may need to restart the application inorder for this secret change to take effect.")))
+                        .append(yellow(dot("You may need to restart the application in order for this secret change to take effect.")))
                         .append(lineSep)
                         .append("  ")
                         .append(yellow(dot("Delete secret operation is irrevocable!!")))

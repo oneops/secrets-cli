@@ -45,7 +45,7 @@ public class SecretVersions extends SecretsCommand {
             Result<List<Secret>> result = secretsClient.getSecretVersions(app.getName(), secretName);
             if (result.isSuccessful()) {
                 List<Secret> secrets = result.getBody();
-                println(sux(format("Retrieved %d version(s) of secret '%s' for application env: %s", secrets.size(), secretName, app.getNsPath())));
+                println(sux(format("Retrieved %d version(s) of secret '%s' for the application environment: %s", secrets.size(), secretName, app.getNsPath())));
                 if (secrets.size() > 0) {
                     println(Secret.getVersionTable(secrets));
                 }

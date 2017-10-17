@@ -58,13 +58,13 @@ public class ClientList extends SecretsCommand {
                 } else {
                     StringBuilder buf = new StringBuilder();
                     buf.append(lineSep)
-                            .append("Verify the followings,")
+                            .append("Verify the following:")
                             .append(lineSep)
                             .append("  ")
-                            .append(yellow(dot(String.format("'secrets-client' component is added to '%s' platforms.", app.getAssembly()))))
+                            .append(yellow(dot(String.format("'secrets-client' component is added to the relevant platforms of the assembly '%s'.", app.getAssembly()))))
                             .append(lineSep)
                             .append("  ")
-                            .append(yellow(dot(String.format("Completed the '%s' application env deployment.", app.getNsPath()))));
+                            .append(yellow(dot(String.format("Completed the deployment of the '%s' application to the environment.", app.getNsPath()))));
                     println(buf.toString());
                 }
             } else {

@@ -34,7 +34,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
  *
  * @author Suresh
  */
-@Command(name = "get", description = "Retrieve secret from vault.")
+@Command(name = "get", description = "Retrieve a secret from the vault.")
 public class SecretGet extends SecretsCommand {
 
     @Arguments(title = "Secret name", description = "Secrets name", required = true)

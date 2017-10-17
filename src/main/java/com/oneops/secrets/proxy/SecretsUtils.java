@@ -97,16 +97,16 @@ public class SecretsUtils {
         File secretsFile = Paths.get(path).toFile();
 
         if (!secretsFile.exists() || secretsFile.isDirectory()) {
-            throw new IllegalArgumentException(format("Secret '%s' not exists or is a directory.", path));
+            throw new IllegalArgumentException(format("Secret '%s' does not exist or is a directory.", path));
         }
         if (secretsFile.length() > 100_000) {
-            throw new IllegalArgumentException(format("Secret '%s' is too large. It should be under 100KB.", path));
+            throw new IllegalArgumentException(format("Secret '%s' is too large. Only up to 100KB per secret is allowed.", path));
         }
         if (isNullOrEmpty(desc)) {
             throw new IllegalArgumentException(format("Secret '%s' description can't be empty.", path));
         }
         if (desc.length() > 64) {
-            throw new IllegalArgumentException(format("Secret '%s' description is too long (Max 64 chars).", path));
+            throw new IllegalArgumentException(format("Secret '%s' description is too long. A maxiumum of 64 characters is allowed.", path));
         }
         if (name != null && name.trim().isEmpty()) {
             throw new IllegalArgumentException("Secret name is empty.");
@@ -161,7 +161,7 @@ public class SecretsUtils {
             System.out.format("Password for %s : ", bold(green(user)));
             return console.readPassword();
         } else {
-            throw new RuntimeException("Can't read '" + user + "' password from console.");
+            throw new RuntimeException("Can't read '" + user + "' password from the console.");
         }
     }
 }
