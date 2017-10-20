@@ -1,14 +1,12 @@
 # :shell: OneOps Secrets CLI
 
 Releases, Javadoc and more in
-[![Maven Central](https://img.shields.io/maven-central/v/com.oneops/secrets-cli.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.oneops%22%20AND%20a%3A%22secrets-cli%22)
-
-[![changelog][cl-svg]][cl-url] 
+[![Maven Central](https://img.shields.io/maven-central/v/com.oneops/secrets-cli.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.oneops%22%20AND%20a%3A%22secrets-cli%22) [![changelog][cl-svg]][cl-url] 
 
 A command line tool for managing [OneOps](http://oneos.com) application secrets.
 OneOps Secrets CLI interacts with the
 [OneOps Secrets Proxy](http://oneops.com/user/account/secrets-proxy.html) API.
- [Secrets Proxy Swagger Apidocs]().
+ [Secrets Proxy Swagger Apidocs](https://oneops.github.com/secrets-proxy/apidocs).
 
 ## Usage
 
