@@ -1,12 +1,9 @@
 # :shell: OneOps Secrets CLI
+----------
+[![Maven Central][maven-svg]][maven-url] [![changelog][cl-svg]][cl-url] [![apidoc][apidoc-svg]][apidoc-url]  
 
-Releases, Javadoc and more in
-[![Maven Central](https://img.shields.io/maven-central/v/com.oneops/secrets-cli.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.oneops%22%20AND%20a%3A%22secrets-cli%22) [![changelog][cl-svg]][cl-url] 
-
-A command line tool for managing [OneOps](http://oneos.com) application secrets.
-OneOps Secrets CLI interacts with the
+A command line tool for managing [OneOps](http://oneos.com) application secrets.OneOps Secrets CLI interacts with the
 [OneOps Secrets Proxy](http://oneops.com/user/account/secrets-proxy.html) API.
- [Secrets Proxy Swagger Apidocs](https://oneops.github.com/secrets-proxy/apidocs).
 
 ## Usage
 
@@ -14,7 +11,7 @@ Detailed user documentation for installation and usage is available on the
 [OneOps website](http://oneops.com/user/design/secrets-client-component) as well
 as via the help function:
 
-```ruby
+```bash
 $ secrets
 usage: secrets <command> [<args>]
 
@@ -35,13 +32,25 @@ The most commonly used secrets commands are:
 See 'secrets help <command>' for more information on a specific command.
 ```
 
+Download
+--------
+
+Download [the latest JAR][1] or grab via Maven:
+```xml
+<dependency>
+    <groupId>com.oneops</groupId>
+    <artifactId>secrets-cli</artifactId>
+    <version>1.0.5</version>
+</dependency>
+```
+
 ### Examples
 
   <img src="docs/images/secrets-cli.gif" width=874 height=491>
   
   *  Add a secret for an application.
   
-  ```
+  ```bash
     $ secrets add -a oneops_test-assembly_dev logstash-forwarder.crt -d "Logstash cert" -n "Logstash-Cert"
     
       ✓ Secret 'Logstash-Cert' added successfully for application /oneops/test-assembly/dev.
@@ -55,7 +64,7 @@ See 'secrets help <command>' for more information on a specific command.
   
   *  Show all secrets for an application.
   
-  ```
+  ```bash
     $ secrets list  -a oneops_test-assembly_dev
     Password for testuser :
     ✓ 3 secrets are stored for application env: /oneops/test-assembly/dev
@@ -85,6 +94,14 @@ After a build the binary executables is located in the `target/` directory and n
 
 <!-- Badges -->
 
+[1]: https://search.maven.org/remote_content?g=com.oneops&a=secrets-cli&v=LATEST
+
+[maven-url]: http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.oneops%22%20AND%20a%3A%22secrets-cli%22
+[maven-svg]: https://img.shields.io/maven-central/v/com.oneops/secrets-cli.svg?label=Maven%20Central&style=flat-square
+ 
 [cl-url]: https://github.com/oneops/secrets-cli/blob/master/CHANGELOG.md
-[cl-svg]: https://img.shields.io/badge/change--log-latest-blue.svg?style=flat-square
+[cl-svg]: https://img.shields.io/badge/change--log-latest-green.svg?style=flat-square
+ 
+[apidoc-url]: https://oneops.github.com/secrets-proxy/apidocs
+[apidoc-svg]: https://img.shields.io/badge/api--doc-latest-cyan.svg?style=flat-square]
 

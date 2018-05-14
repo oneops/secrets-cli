@@ -1,25 +1,30 @@
-# Change Log
-All notable changes to this project will be documented in this file. The format
-is based on [Keep a Changelog](http://keepachangelog.com/).
+# Changelog
+All notable changes to this project will be documented in this file.
 
-## [1.0.4] - Released 2017-10-19
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+### Changed
+
+## [1.0.5] - 2018-05-14
+### Changed
+- Increased secrets max size to 250 KB.
+
+## [1.0.4] - 2017-10-19
 ### Added
 - Updated readme with links to Central Repository and documentation
 - Inline help improvements
 - Added license 
 
-## [1.0.3] - Released 2017-10-04
-
-First fully working public release to Central Repository suitable for produciton usage.
-
-## [1.0.2]
+## [1.0.2] - 2017-10-04
 ### Added
- - Major feature release.
+ - Initial release.
 
-[1.0.4]: https://github.com/oneops/secrets-cli/compare/1.0.4...1.0.2
-[1.0.3]: https://github.com/oneops/secrets-cli/compare/1.0.3...master
-[1.0.2]: https://github.com/oneops/secrets-cli/compare/1.0.2...master
-[Unreleased]: https://github.com/oneops/secrets-cli/compare/1.0.2...HEAD
+[Unreleased]: https://github.com/oneops/secrets-cli/compare/release-1.0.5...HEAD
+[1.0.5]: https://github.com/oneops/secrets-cli/compare/release-1.0.4...release-1.0.5
+[1.0.4]: https://github.com/oneops/secrets-cli/compare/1.0.2...release-1.0.4
+[1.0.2]: https://github.com/oneops/secrets-cli/compare/1.0.2...1.0.2
 
 
 
