@@ -9,67 +9,51 @@ import org.junit.jupiter.api.Test;
  */
 class SecretsClientTest {
 
-    @Test
-    void genToken() {
-    }
+  @Test
+  void genToken() {}
 
-    @Test
-    void getGroupDetails() {
-    }
+  @Test
+  void getGroupDetails() {}
 
-    @Test
-    void getAllClients() {
-    }
+  @Test
+  void getAllClients() {}
 
-    @Test
-    void getClientDetails() {
-    }
+  @Test
+  void getClientDetails() {}
 
-    @Test
-    void getAllSecrets() {
-    }
+  @Test
+  void getAllSecrets() {}
 
-    @Test
-    void getAllSecretsExpiring() {
-    }
+  @Test
+  void getAllSecretsExpiring() {}
 
-    @Test
-    void createSecret() {
-    }
+  @Test
+  void createSecret() {}
 
-    @Test
-    void updateSecret() {
-    }
+  @Test
+  void updateSecret() {}
 
-    @Test
-    void getSecret() {
-    }
+  @Test
+  void getSecret() {}
 
-    @Test
-    void getSecretVersions() {
-    }
+  @Test
+  void getSecretVersions() {}
 
-    @Test
-    void deleteSecret() {
-    }
+  @Test
+  void deleteSecret() {}
 
-    @Test
-    void deleteClient() {
-    }
+  @Test
+  void deleteClient() {}
 
-    @Test
-    void deleteAllSecrets() {
-    }
+  @Test
+  void deleteAllSecrets() {}
 
-    @Test
-    void setSecretVersion() {
-    }
+  @Test
+  void setSecretVersion() {}
 
-    @Test
-    void getSecretContent() {
-    }
+  @Test
+  void getSecretContent() {}
 
-    @Test
-    void setAuthToken() {
-    }
+  @Test
+  void setAuthToken() {}
 }

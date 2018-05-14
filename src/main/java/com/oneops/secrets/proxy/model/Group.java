@@ -1,20 +1,20 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  *
- *   Copyright 2017 Walmart, Inc.
+ * <p>Copyright 2017 Walmart, Inc.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
+ * limitations under the License.
  *
- *******************************************************************************/
+ * <p>*****************************************************************************
+ */
 package com.oneops.secrets.proxy.model;
 
 import java.util.*;
@@ -26,82 +26,103 @@ import java.util.*;
  */
 public class Group {
 
-    /**
-     * Application metadata.
-     */
-    public static final String USERID_METADATA = "_userId";
-    public static final String DOMAIN_METADATA = "_domain";
+  /** Application metadata. */
+  public static final String USERID_METADATA = "_userId";
 
-    private final String name;
-    private final String description;
-    private final long createdAtSeconds;
-    private final long updatedAtSeconds;
-    private final String createdBy;
-    private final String updatedBy;
-    private final List<String> secrets;
-    private final List<String> clients;
-    private final Map<String, String> metadata;
+  public static final String DOMAIN_METADATA = "_domain";
 
-    public Group(String name, String description, long createdAtSeconds, long updatedAtSeconds, String createdBy, String updatedBy, List<String> secrets, List<String> clients, Map<String, String> metadata) {
-        this.name = name;
-        this.description = description;
-        this.createdAtSeconds = createdAtSeconds;
-        this.updatedAtSeconds = updatedAtSeconds;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.secrets = secrets;
-        this.clients = clients;
-        this.metadata = metadata;
-    }
+  private final String name;
+  private final String description;
+  private final long createdAtSeconds;
+  private final long updatedAtSeconds;
+  private final String createdBy;
+  private final String updatedBy;
+  private final List<String> secrets;
+  private final List<String> clients;
+  private final Map<String, String> metadata;
 
-    public String getName() {
-        return name;
-    }
+  public Group(
+      String name,
+      String description,
+      long createdAtSeconds,
+      long updatedAtSeconds,
+      String createdBy,
+      String updatedBy,
+      List<String> secrets,
+      List<String> clients,
+      Map<String, String> metadata) {
+    this.name = name;
+    this.description = description;
+    this.createdAtSeconds = createdAtSeconds;
+    this.updatedAtSeconds = updatedAtSeconds;
+    this.createdBy = createdBy;
+    this.updatedBy = updatedBy;
+    this.secrets = secrets;
+    this.clients = clients;
+    this.metadata = metadata;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public long getCreatedAtSeconds() {
-        return createdAtSeconds;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public long getUpdatedAtSeconds() {
-        return updatedAtSeconds;
-    }
+  public long getCreatedAtSeconds() {
+    return createdAtSeconds;
+  }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
+  public long getUpdatedAtSeconds() {
+    return updatedAtSeconds;
+  }
 
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
+  public String getCreatedBy() {
+    return createdBy;
+  }
 
-    public List<String> getSecrets() {
-        return secrets;
-    }
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-    public List<String> getClients() {
-        return clients;
-    }
+  public List<String> getSecrets() {
+    return secrets;
+  }
 
-    public Map<String, String> getMetadata() {
-        return metadata;
-    }
+  public List<String> getClients() {
+    return clients;
+  }
 
-    @Override
-    public String toString() {
-        return "Group{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", createdAtSeconds=" + createdAtSeconds +
-                ", updatedAtSeconds=" + updatedAtSeconds +
-                ", createdBy='" + createdBy + '\'' +
-                ", updatedBy='" + updatedBy + '\'' +
-                ", secrets=" + secrets +
-                ", clients=" + clients +
-                ", metadata=" + metadata +
-                '}';
-    }
+  public Map<String, String> getMetadata() {
+    return metadata;
+  }
+
+  @Override
+  public String toString() {
+    return "Group{"
+        + "name='"
+        + name
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", createdAtSeconds="
+        + createdAtSeconds
+        + ", updatedAtSeconds="
+        + updatedAtSeconds
+        + ", createdBy='"
+        + createdBy
+        + '\''
+        + ", updatedBy='"
+        + updatedBy
+        + '\''
+        + ", secrets="
+        + secrets
+        + ", clients="
+        + clients
+        + ", metadata="
+        + metadata
+        + '}';
+  }
 }
