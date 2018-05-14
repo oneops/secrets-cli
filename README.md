@@ -73,7 +73,7 @@ See 'secrets help <command>' for more information on a specific command.
 
 - Source
 
-    > Make sure to provide proper secret-proxy [truststore](src/main/resource/keystores/secrets_proxy_truststore.p12) and [application.conf](src/main/resource/application.conf) before doing the build. Use [InstallCerts](https://github.com/sureshg/InstallCerts) tool to auto-generate trust-store from your secret proxy HTTPS endpoint.
+    > Make sure to provide proper secret-proxy [truststore](src/main/resources/keystores/secrets_proxy_truststore.p12) and [application.conf](src/main/resources/application.conf) before doing the build. Use [InstallCerts](https://github.com/sureshg/InstallCerts) tool to auto-generate trust-store from your secret proxy HTTPS endpoint.
      
     ```
      $ git clone https://github.com/oneops/secrets-cli
