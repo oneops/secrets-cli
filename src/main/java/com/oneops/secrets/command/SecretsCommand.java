@@ -38,11 +38,12 @@ public abstract class SecretsCommand implements Runnable {
   protected Logger log = Logger.getLogger(getClass().getSimpleName());
 
   @Option(
-      name = "-a",
-      title = "Application name",
-      description =
-          "OneOps application name (org_assembly_env), to which you have secret-admin access",
-      required = true)
+    name = "-a",
+    title = "Application name",
+    description =
+        "OneOps application name (org_assembly_env), to which you have secret-admin access",
+    required = true
+  )
   String appName;
 
   @Option(name = "-u", title = "User", description = "User name")
