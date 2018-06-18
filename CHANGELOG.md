@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Changed
 
+## [1.1.0] - 2018-06-18
+### Added
+- Support for all lower environments.
+
+### Changed
+- Increased secrets max size to 350 KB.
+
 ## [1.0.5] - 2018-05-14
 ### Changed
 - Increased secrets max size to 250 KB.
@@ -21,7 +28,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Initial release.
 
-[Unreleased]: https://github.com/oneops/secrets-cli/compare/release-1.0.5...HEAD
+[Unreleased]: https://github.com/oneops/secrets-cli/compare/release-1.1.0...HEAD
+[1.1.0]: https://github.com/oneops/secrets-cli/compare/release-1.0.5...release-1.1.0
 [1.0.5]: https://github.com/oneops/secrets-cli/compare/release-1.0.4...release-1.0.5
 [1.0.4]: https://github.com/oneops/secrets-cli/compare/1.0.2...release-1.0.4
 [1.0.2]: https://github.com/oneops/secrets-cli/compare/1.0.2...1.0.2

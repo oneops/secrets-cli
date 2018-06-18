@@ -22,22 +22,46 @@ import static java.util.Collections.singletonList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static okhttp3.logging.HttpLoggingInterceptor.Level.BASIC;
 
-import com.oneops.secrets.config.*;
-import com.oneops.secrets.proxy.model.*;
+import com.oneops.secrets.config.CliConfig;
+import com.oneops.secrets.config.KeyStoreConfig;
+import com.oneops.secrets.config.SecretsProxyConfig;
+import com.oneops.secrets.proxy.model.AuthUser;
+import com.oneops.secrets.proxy.model.Client;
+import com.oneops.secrets.proxy.model.ErrorRes;
+import com.oneops.secrets.proxy.model.Group;
+import com.oneops.secrets.proxy.model.Result;
+import com.oneops.secrets.proxy.model.Secret;
+import com.oneops.secrets.proxy.model.SecretContent;
+import com.oneops.secrets.proxy.model.SecretReq;
+import com.oneops.secrets.proxy.model.SecretVersion;
+import com.oneops.secrets.proxy.model.TokenReq;
+import com.oneops.secrets.proxy.model.TokenRes;
 import com.squareup.moshi.Moshi;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
-import java.nio.file.*;
-import java.security.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
-import javax.net.ssl.*;
-import okhttp3.*;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import okhttp3.ConnectionSpec;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.*;
 import retrofit2.Call;
+import retrofit2.Converter;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 /**
@@ -112,17 +136,14 @@ public class SecretsClient {
   }
 
   /**
-   * Generate an access token with default <b>prod</b> domain.
+   * Generate an access token for the given domain.
    *
    * @param userName oneops username
    * @param password oneops password
+   * @param domain OneOps auth domain
    * @return Token response.
    * @throws IOException throws if any IO error when communicating to Secrets Proxy.
    */
-  public Result<TokenRes> genToken(String userName, String password) throws IOException {
-    return genToken(userName, password, "prod");
-  }
-
   public Result<TokenRes> genToken(String userName, String password, String domain)
       throws IOException {
     Result<TokenRes> res = exec(secretsProxy.token(new TokenReq(userName, password, domain)));

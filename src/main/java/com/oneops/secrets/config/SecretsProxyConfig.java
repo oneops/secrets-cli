@@ -32,15 +32,20 @@ public class SecretsProxyConfig {
 
   private final KeyStoreConfig trustStore;
 
-  public SecretsProxyConfig(String baseUrl, int timeout, KeyStoreConfig trustStore) {
+  private final long secretMaxSize;
+
+  public SecretsProxyConfig(
+      String baseUrl, int timeout, long secretMaxSize, KeyStoreConfig trustStore) {
     this.baseUrl = baseUrl;
     this.timeout = timeout;
+    this.secretMaxSize = secretMaxSize;
     this.trustStore = trustStore;
   }
 
   public SecretsProxyConfig(Config config) {
     this.baseUrl = config.getString("secretsProxy.baseUrl");
     this.timeout = config.getInt("secretsProxy.timeout");
+    this.secretMaxSize = config.getLong("secretsProxy.secretMaxSize");
     this.trustStore = new KeyStoreConfig(config.getConfig("secretsProxy.truststore"));
   }
 
@@ -50,6 +55,10 @@ public class SecretsProxyConfig {
 
   public int getTimeout() {
     return timeout;
+  }
+
+  public long getSecretMaxSize() {
+    return secretMaxSize;
   }
 
   public KeyStoreConfig getTrustStore() {
@@ -66,6 +75,8 @@ public class SecretsProxyConfig {
         + timeout
         + ", trustStore="
         + trustStore
+        + ", secretMaxSize="
+        + secretMaxSize
         + '}';
   }
 }

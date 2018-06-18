@@ -18,7 +18,8 @@
 package com.oneops.secrets.proxy;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.oneops.secrets.utils.Color.*;
+import static com.oneops.secrets.utils.Color.bold;
+import static com.oneops.secrets.utils.Color.green;
 import static com.oneops.secrets.utils.Platform.getUserHome;
 import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -26,9 +27,16 @@ import static java.util.logging.Level.WARNING;
 
 import com.oneops.secrets.command.SecretsCommand;
 import com.oneops.secrets.config.CliConfig;
-import com.oneops.secrets.proxy.model.*;
-import java.io.*;
-import java.nio.file.*;
+import com.oneops.secrets.proxy.model.AuthUser;
+import com.oneops.secrets.proxy.model.Result;
+import com.oneops.secrets.proxy.model.TokenRes;
+import java.io.Console;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.GeneralSecurityException;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
@@ -43,7 +51,7 @@ public class SecretsUtils {
 
   private static Logger log = Logger.getLogger(SecretsUtils.class.getSimpleName());
 
-  private static Path secretsPath = Paths.get(getUserHome(), ".secrets-proxy.token");
+  private static Path secretsPath = Paths.get(getUserHome(), ".secrets-cli");
 
   public static final DateTimeFormatter dateFormatter = ofPattern("yyyy-MM-dd HH:mm:ss z");
 
@@ -58,7 +66,7 @@ public class SecretsUtils {
     try {
       SecretsClient secretsClient = new SecretsClient(CliConfig.secretsProxy);
       String currentUser = cmd.user;
-      String bearerToken = readToken();
+      String bearerToken = readToken(cmd.authTokenName());
 
       if (bearerToken != null) {
         log.info("Using bearer token from secrets path.");
@@ -74,9 +82,9 @@ public class SecretsUtils {
       log.warning("Bearer token is not valid. Generating new token.");
       String password = String.valueOf(readPassword(currentUser));
 
-      Result<TokenRes> genToken = secretsClient.genToken(currentUser, password);
+      Result<TokenRes> genToken = secretsClient.genToken(currentUser, password, cmd.domain);
       if (genToken.isSuccessful()) {
-        writeToken(genToken.getBody().getAccessToken());
+        writeToken(cmd.authTokenName(), genToken.getBody().getAccessToken());
         return secretsClient;
       } else {
         throw new SecretsProxyException(cmd, genToken.getErr());
@@ -89,7 +97,7 @@ public class SecretsUtils {
   }
 
   /**
-   * Helper method to validate secrets file and it'e metadata.
+   * Helper method to validate secrets file and it's metadata.
    *
    * @param path secret file path
    * @param name secret name to be used
@@ -102,18 +110,25 @@ public class SecretsUtils {
       throw new IllegalArgumentException(
           format("Secret '%s' does not exist or is a directory.", path));
     }
-    if (secretsFile.length() > 250_000) {
+
+    long maxSize = CliConfig.secretsProxy.getSecretMaxSize();
+    if (secretsFile.length() > maxSize) {
       throw new IllegalArgumentException(
-          format("Secret '%s' is too large. Only up to 250KB per secret is allowed.", path));
+          format(
+              "Secret '%s' is too large. Only up to %s per secret is allowed.",
+              path, binaryPrefix(maxSize)));
     }
+
     if (isNullOrEmpty(desc)) {
       throw new IllegalArgumentException(format("Secret '%s' description can't be empty.", path));
     }
+
     if (desc.length() > 64) {
       throw new IllegalArgumentException(
           format(
               "Secret '%s' description is too long. A maximum of 64 characters is allowed.", path));
     }
+
     if (name != null && name.trim().isEmpty()) {
       throw new IllegalArgumentException("Secret name is empty.");
     }
@@ -122,12 +137,14 @@ public class SecretsUtils {
   /**
    * Reads the secrets proxy token from secrets path.
    *
+   * @param tokenName auth token file name.
    * @return secrets proxy token or <code>null</code> if it can't find.
    */
-  private static @Nullable String readToken() {
+  private static @Nullable String readToken(String tokenName) {
     String token = null;
     try {
-      token = new String(Files.readAllBytes(secretsPath));
+      Path tokenPath = secretsPath.resolve(tokenName);
+      token = new String(Files.readAllBytes(tokenPath));
     } catch (IOException ex) {
       log.log(WARNING, "Can't read the token: " + ex.getMessage());
     }
@@ -135,13 +152,16 @@ public class SecretsUtils {
   }
 
   /**
-   * Write the secrets auth token to secrets path. The token is usually valid for only 60 minutes.
+   * Write the secrets auth token to secrets path. The token is usually valid for only 120 minutes.
    *
-   * @param token auth token.
+   * @param tokenName auth token file name.
+   * @param token auth token content.
    */
-  private static void writeToken(String token) {
+  private static void writeToken(String tokenName, String token) {
     try {
-      Files.write(secretsPath, token.getBytes(), StandardOpenOption.CREATE);
+      secretsPath.toFile().mkdir();
+      Path tokenPath = secretsPath.resolve(tokenName);
+      Files.write(tokenPath, token.getBytes(), StandardOpenOption.CREATE);
     } catch (IOException ex) {
       log.log(WARNING, "Can't save the token.", ex);
     }
@@ -151,7 +171,7 @@ public class SecretsUtils {
    * Read password from console.
    *
    * <p>Note that when the System.console() is null, there is no secure way of entering a password
-   * without exposing it in the clear text on the console (it is echoed onto the screen).For this
+   * without exposing it in the clear text on the console (it is echoed onto the screen). For this
    * reason, it is suggested that the user login prior to using functionality such as input
    * redirection since this could result in a null console.
    *
@@ -165,6 +185,25 @@ public class SecretsUtils {
       return console.readPassword();
     } else {
       throw new RuntimeException("Can't read '" + user + "' password from the console.");
+    }
+  }
+
+  /**
+   * Converts a given number to a string preceded by the corresponding binary International System
+   * of Units (SI) prefix.
+   */
+  public static String binaryPrefix(long size) {
+    long unit = 1000;
+    String suffix = "B";
+
+    if (size < unit) {
+      return format("%d %s", size, suffix);
+    } else {
+      int exp = (int) (Math.log(size) / Math.log(unit));
+      // Binary Prefix mnemonic that is prepended to the units.
+      String binPrefix = "KMGTPEZY".charAt(exp - 1) + suffix;
+      // Count => (unit^0.x * unit^exp)/unit^exp
+      return format("%.2f %s", size / Math.pow(unit, exp), binPrefix);
     }
   }
 }

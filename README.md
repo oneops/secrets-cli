@@ -39,7 +39,7 @@ Download [the latest JAR][1] or grab via Maven:
 <dependency>
     <groupId>com.oneops</groupId>
     <artifactId>secrets-cli</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 

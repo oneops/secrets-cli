@@ -1,14 +1,6 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
-.fbExcludeFilterFile
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
+.DS_Store
 
 ### IntelliJ IDEA ###
 .idea
@@ -16,13 +8,7 @@ target/
 *.iml
 *.ipr
 
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
 ### Ignore the Keystores
-src/main/resource/keystores/*.p12
+src/main/resources/keystores/*
+log/
+javadocs/
