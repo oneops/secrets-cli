@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>secrets-cli</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1-SNAPSHOT</version>
   <name>secrets-cli</name>
   <description>Command-line shell for managing secrets for authenticated OneOps users.</description>
   <url>https://github.com/oneops/secrets-cli</url>
@@ -22,7 +22,7 @@
   <scm>
     <developerConnection>scm:git:git@github.com:oneops/secrets-cli.git</developerConnection>
     <url>https://github.com/oneops/secrets-cli</url>
-    <tag>release-1.1.0</tag>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>github</system>
