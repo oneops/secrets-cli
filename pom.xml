@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.oneops</groupId>
@@ -10,7 +8,7 @@
   </parent>
 
   <artifactId>secrets-cli</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.0</version>
   <name>secrets-cli</name>
   <description>Command-line shell for managing secrets for authenticated OneOps users.</description>
   <url>https://github.com/oneops/secrets-cli</url>
@@ -24,7 +22,7 @@
   <scm>
     <developerConnection>scm:git:git@github.com:oneops/secrets-cli.git</developerConnection>
     <url>https://github.com/oneops/secrets-cli</url>
-    <tag>HEAD</tag>
+    <tag>release-1.1.0</tag>
   </scm>
   <issueManagement>
     <system>github</system>
@@ -228,10 +226,8 @@
               <shadedArtifactAttached>true</shadedArtifactAttached>
               <shadedClassifierName>uber</shadedClassifierName>
               <transformers>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
                     <Main-Class>${main-class}</Main-Class>
                     <Built-By>OneOps</Built-By>
