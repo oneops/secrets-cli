@@ -80,7 +80,7 @@ public class SecretsUtils {
       }
 
       log.warning("Bearer token is not valid. Generating new token.");
-      String password = String.valueOf(readPassword(currentUser));
+      String password = String.valueOf(readPassword(currentUser, cmd.password));
 
       Result<TokenRes> genToken = secretsClient.genToken(currentUser, password, cmd.domain);
       if (genToken.isSuccessful()) {
@@ -178,13 +178,15 @@ public class SecretsUtils {
    * @param user user who we are prompting a password for
    * @return user-inputted password
    */
-  private static char[] readPassword(String user) {
+  private static char[] readPassword(String user, String pwd) {
     Console console = System.console();
     if (console != null) {
       System.out.format("Password for %s : ", bold(green(user)));
       return console.readPassword();
     } else {
-      throw new RuntimeException("Can't read '" + user + "' password from the console.");
+      log.info("Receiving password from commands");
+      char[] chrArr = null != pwd ? pwd.toCharArray() : new char[0];
+      return chrArr;
     }
   }
 

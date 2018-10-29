@@ -55,6 +55,13 @@ public abstract class SecretsCommand implements Runnable {
   @Option(name = "-v", title = "Verbose", description = "Verbose mode")
   public boolean verbose;
 
+  @Option(
+    name = "-p",
+    title = "Password",
+    description = "Password - (Note : Use password if it is really required)"
+  )
+  public String password;
+
   /** Holds application details. */
   public App app;
 
