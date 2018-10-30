@@ -180,7 +180,7 @@ public class SecretsUtils {
    */
   private static char[] readPassword(String user, String pwd) {
     Console console = System.console();
-    if (console != null) {
+    if (pwd == null && console != null) {
       System.out.format("Password for %s : ", bold(green(user)));
       return console.readPassword();
     } else {
