@@ -90,7 +90,8 @@ public abstract class SecretsCommand implements Runnable {
 
   private void validateAuthDomain() {
     try {
-      AuthDomain.valueOf(domain.toUpperCase());
+      log.info("ValidateAuthDomain::" + domain);
+      AuthDomain.getAuthDomain(domain);
     } catch (IllegalArgumentException iae) {
       throw new IllegalArgumentException(
           "Invalid auth domain "
