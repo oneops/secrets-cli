@@ -24,6 +24,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import com.oneops.secrets.proxy.SecretsProxyException;
 import com.oneops.secrets.proxy.model.*;
 import io.airlift.airline.*;
+import java.io.Console;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Base64;
@@ -68,10 +69,10 @@ public class SecretGet extends SecretsCommand {
   /** Helper method to save secret content to a file. */
   private Path save(String name, byte[] content) throws IOException {
     Path path = Paths.get(name);
-    if (path.toFile().exists()) {
+    Console console = System.console();
+    if (console != null && path.toFile().exists()) {
       String in =
-          System.console()
-              .readLine(warn("File " + path + " exists. Do you want to overwrite (y/n)? "));
+          console.readLine(warn("File " + path + " exists. Do you want to overwrite (y/n)? "));
       if (in == null || !in.equalsIgnoreCase("y")) {
         throw new IllegalStateException("Exiting");
       }
