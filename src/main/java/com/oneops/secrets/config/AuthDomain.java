@@ -9,7 +9,13 @@ public enum AuthDomain {
   PROD("prod"),
   MGMT("mgmt"),
   STG("stg"),
-  DEV("dev");
+  DEV("dev"),
+
+  /*Tekton domain name*/
+  TEKTONPROD("tektonprod"),
+  TEKTONMGMT("tektonmgmt"),
+  TEKTONSTG("tektonstg"),
+  TEKTONDEV("tektondev");
 
   private final String type;
 
