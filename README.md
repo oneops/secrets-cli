@@ -1,7 +1,7 @@
 # :shell: OneOps Secrets CLI
 [![Maven Central][maven-svg]][maven-url] [![changelog][cl-svg]][cl-url] [![apidoc][apidoc-svg]][apidoc-url]  
 
-A command line tool for managing [OneOps](http://oneos.com) application secrets.OneOps Secrets CLI interacts with the
+A command line tool for managing [OneOps](http://oneops.com) application secrets.OneOps Secrets CLI interacts with the
 [OneOps Secrets Proxy](http://oneops.com/user/account/secrets-proxy.html) API.
 
 ## Usage
