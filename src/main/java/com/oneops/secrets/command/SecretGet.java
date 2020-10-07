@@ -24,7 +24,9 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import com.oneops.secrets.proxy.SecretsProxyException;
 import com.oneops.secrets.proxy.model.*;
 import io.airlift.airline.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.Base64;
 
@@ -69,13 +71,30 @@ public class SecretGet extends SecretsCommand {
   private Path save(String name, byte[] content) throws IOException {
     Path path = Paths.get(name);
     if (path.toFile().exists()) {
-      String in =
-          System.console()
-              .readLine(warn("File " + path + " exists. Do you want to overwrite (y/n)? "));
-      if (in == null || !in.equalsIgnoreCase("y")) {
-        throw new IllegalStateException("Exiting");
+
+      if (null != System.console()) {
+        String in =
+            System.console()
+                .readLine(warn("File " + path + " exists. Do you want to overwrite (y/n)? "));
+        if (in == null || !in.equalsIgnoreCase("y")) {
+          throw new IllegalStateException("Exiting");
+        }
+        return Files.write(path, content, CREATE);
+      } else {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String input = "";
+        try {
+          input = reader.readLine();
+        } catch (IOException e) {
+          throw new IllegalStateException("Exiting");
+        }
+        if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) {
+          return Files.write(path, content, CREATE);
+        } else {
+          throw new IllegalStateException("Exiting");
+        }
       }
     }
-    return Files.write(path, content, CREATE);
+    throw new IllegalStateException("Exiting");
   }
 }
