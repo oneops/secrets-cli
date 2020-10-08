@@ -28,6 +28,7 @@ import io.airlift.airline.*;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Base64;
+import java.util.regex.Pattern;
 
 /**
  * Secret update command.
@@ -54,18 +55,27 @@ public class SecretUpdate extends SecretsCommand {
   public void exec() {
     validateSecret(filePath, secretName, description);
     Path path = Paths.get(filePath);
-
+    Pattern p = Pattern.compile("^y(es)?$");
     try {
       String secret = Base64.getEncoder().encodeToString(Files.readAllBytes(path));
       SecretReq secReq = new SecretReq(secret, description, null, 0, "secret");
 
-      String in =
-          System.console()
-              .readLine(
-                  warn(
-                      "You are going to update an existing secret. Do you want to proceed (y/n)? "));
-      if (in == null || !in.equalsIgnoreCase("y")) {
-        throw new IllegalStateException("Exiting");
+      if (null != System.console()) {
+        String in =
+            ConsoleImpl.readConsole(
+                "You are going to update an existing secret. Do you want to proceed (y/n)? ");
+        if (in == null || !p.matcher(in.toLowerCase()).lookingAt()) {
+          throw new IllegalStateException("Exiting");
+        }
+      } else {
+        try {
+          String input = CommandUtil.readFromSystemIn(p);
+          if (input == null || !p.matcher(input.toLowerCase()).lookingAt()) {
+            throw new IllegalStateException("Exiting");
+          }
+        } catch (Exception e) {
+          throw e;
+        }
       }
 
       secretName = (secretName != null) ? secretName : path.toFile().getName();

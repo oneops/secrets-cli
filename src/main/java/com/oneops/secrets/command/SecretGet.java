@@ -24,9 +24,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import com.oneops.secrets.proxy.SecretsProxyException;
 import com.oneops.secrets.proxy.model.*;
 import io.airlift.airline.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.Base64;
 import java.util.regex.Pattern;
@@ -74,20 +72,19 @@ public class SecretGet extends SecretsCommand {
     Pattern p = Pattern.compile("^y(es)?$");
     if (path.toFile().exists()) {
       if (null != System.console()) {
-        String in = ConsoleImpl.readConsole(path);
-        if (in == null || !p.matcher(in).lookingAt()) {
+        String in =
+            ConsoleImpl.readConsole("File " + path + " exists. Do you want to overwrite (y/n)? ");
+        if (in == null || !p.matcher(in.toLowerCase()).lookingAt()) {
           throw new IllegalStateException("Exiting");
         }
       } else {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String input = "";
         try {
-          input = reader.readLine();
-        } catch (IOException e) {
-          throw new IllegalStateException("Exiting");
-        }
-        if (input == null || !p.matcher(input).lookingAt()) {
-          throw new IllegalStateException("Exiting");
+          String input = CommandUtil.readFromSystemIn(p);
+          if (input == null || !p.matcher(input.toLowerCase()).lookingAt()) {
+            throw new IllegalStateException("Exiting");
+          }
+        } catch (Exception e) {
+          throw e;
         }
       }
     }
