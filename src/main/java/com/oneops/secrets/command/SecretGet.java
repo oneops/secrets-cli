@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.Base64;
+import java.util.regex.Pattern;
 
 /**
  * Secret get content command.
@@ -70,16 +71,13 @@ public class SecretGet extends SecretsCommand {
   /** Helper method to save secret content to a file. */
   private Path save(String name, byte[] content) throws IOException {
     Path path = Paths.get(name);
+    Pattern p = Pattern.compile("^y(es)?$");
     if (path.toFile().exists()) {
-
       if (null != System.console()) {
-        String in =
-            System.console()
-                .readLine(warn("File " + path + " exists. Do you want to overwrite (y/n)? "));
-        if (in == null || !in.equalsIgnoreCase("y")) {
+        String in = ConsoleImpl.readConsole(path);
+        if (in == null || !p.matcher(in).lookingAt()) {
           throw new IllegalStateException("Exiting");
         }
-        return Files.write(path, content, CREATE);
       } else {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String input = "";
@@ -88,13 +86,11 @@ public class SecretGet extends SecretsCommand {
         } catch (IOException e) {
           throw new IllegalStateException("Exiting");
         }
-        if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) {
-          return Files.write(path, content, CREATE);
-        } else {
+        if (input == null || !p.matcher(input).lookingAt()) {
           throw new IllegalStateException("Exiting");
         }
       }
     }
-    throw new IllegalStateException("Exiting");
+    return Files.write(path, content, CREATE);
   }
 }
