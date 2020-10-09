@@ -27,7 +27,6 @@ import io.airlift.airline.*;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Base64;
-import java.util.regex.Pattern;
 
 /**
  * Secret get content command.
@@ -69,24 +68,9 @@ public class SecretGet extends SecretsCommand {
   /** Helper method to save secret content to a file. */
   private Path save(String name, byte[] content) throws IOException {
     Path path = Paths.get(name);
-    Pattern p = Pattern.compile("^y(es)?$");
+
     if (path.toFile().exists()) {
-      if (null != System.console()) {
-        String in =
-            ConsoleImpl.readConsole("File " + path + " exists. Do you want to overwrite (y/n)? ");
-        if (in == null || !p.matcher(in.toLowerCase()).lookingAt()) {
-          throw new IllegalStateException("Exiting");
-        }
-      } else {
-        try {
-          String input = CommandUtil.readFromSystemIn(p);
-          if (input == null || !p.matcher(input.toLowerCase()).lookingAt()) {
-            throw new IllegalStateException("Exiting");
-          }
-        } catch (Exception e) {
-          throw e;
-        }
-      }
+      Console.readConsole("File " + path + " exists. Do you want to overwrite (y/n)? ");
     }
     return Files.write(path, content, CREATE);
   }
