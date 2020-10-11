@@ -41,14 +41,8 @@ public class SecretDelete extends SecretsCommand {
   public void exec() {
 
     try {
-      String in =
-          System.console()
-              .readLine(
-                  warn(
-                      "The delete secret operation is irrevocable. Do you want to proceed (y/n)? "));
-      if (in == null || !in.equalsIgnoreCase("y")) {
-        throw new IllegalStateException("Exiting");
-      }
+      Console.readConsole(
+          "The delete secret operation is irrevocable. Do you want to proceed (y/n)? ");
 
       Result<Void> result = secretsClient.deleteSecret(app.getName(), secretName);
       if (result.isSuccessful()) {

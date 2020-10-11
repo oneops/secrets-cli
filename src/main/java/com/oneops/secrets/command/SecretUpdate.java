@@ -54,19 +54,12 @@ public class SecretUpdate extends SecretsCommand {
   public void exec() {
     validateSecret(filePath, secretName, description);
     Path path = Paths.get(filePath);
-
     try {
       String secret = Base64.getEncoder().encodeToString(Files.readAllBytes(path));
       SecretReq secReq = new SecretReq(secret, description, null, 0, "secret");
 
-      String in =
-          System.console()
-              .readLine(
-                  warn(
-                      "You are going to update an existing secret. Do you want to proceed (y/n)? "));
-      if (in == null || !in.equalsIgnoreCase("y")) {
-        throw new IllegalStateException("Exiting");
-      }
+      Console.readConsole(
+          "You are going to update an existing secret. Do you want to proceed (y/n)? ");
 
       secretName = (secretName != null) ? secretName : path.toFile().getName();
       Result<Void> result = secretsClient.updateSecret(app.getName(), secretName, secReq);

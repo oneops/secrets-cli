@@ -68,13 +68,9 @@ public class SecretGet extends SecretsCommand {
   /** Helper method to save secret content to a file. */
   private Path save(String name, byte[] content) throws IOException {
     Path path = Paths.get(name);
+
     if (path.toFile().exists()) {
-      String in =
-          System.console()
-              .readLine(warn("File " + path + " exists. Do you want to overwrite (y/n)? "));
-      if (in == null || !in.equalsIgnoreCase("y")) {
-        throw new IllegalStateException("Exiting");
-      }
+      Console.readConsole("File " + path + " exists. Do you want to overwrite (y/n)? ");
     }
     return Files.write(path, content, CREATE);
   }
