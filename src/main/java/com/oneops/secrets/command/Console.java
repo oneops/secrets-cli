@@ -1,6 +1,7 @@
 package com.oneops.secrets.command;
 
 import static com.oneops.secrets.utils.Color.warn;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
