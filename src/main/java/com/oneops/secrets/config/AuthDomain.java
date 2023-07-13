@@ -16,6 +16,11 @@ public enum AuthDomain {
   TEKTONMGMT("tektonmgmt"),
   TEKTONSTG("tektonstg"),
   TEKTONDEV("tektondev");
+  
+/*Oneops PCI domain name*/
+  OOPCIQA("stg-pci"),
+  OOPCIPROD("prod-pci"),
+  OOPCIMGMT("mgmt-pci");
 
   private final String type;
 
