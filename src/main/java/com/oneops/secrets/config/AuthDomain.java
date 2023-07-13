@@ -10,12 +10,6 @@ public enum AuthDomain {
   MGMT("mgmt"),
   STG("stg"),
   DEV("dev"),
-
-  /*Tekton domain name*/
-  TEKTONPROD("tektonprod"),
-  TEKTONMGMT("tektonmgmt"),
-  TEKTONSTG("tektonstg"),
-  TEKTONDEV("tektondev");
   
 /*Oneops PCI domain name*/
   OOPCIQA("stg-pci"),
